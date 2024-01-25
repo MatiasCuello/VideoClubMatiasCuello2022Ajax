@@ -152,6 +152,7 @@
     <Compile Include="Models\Genero\GeneroEditVm.cs" />
     <Compile Include="Models\Pelicula\PeliculaEditVm.cs" />
     <Compile Include="Models\Pelicula\PeliculaListVm.cs" />
+    <Compile Include="Models\Provincias\ProvinciaEditVm.cs" />
     <Compile Include="Models\Soporte\SoporteEditVm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -505,6 +506,7 @@
     <Content Include="Views\Soporte\Delete.cshtml" />
     <Content Include="Views\Pelicula\Index.cshtml" />
     <Content Include="Views\Provincias\Index.cshtml" />
+    <Content Include="Views\Provincias\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

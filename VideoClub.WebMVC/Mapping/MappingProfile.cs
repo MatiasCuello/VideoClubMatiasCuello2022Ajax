@@ -7,6 +7,7 @@ using VideoClub.Entidades.Entidades;
 using VideoClub.WebMVC.Models.Calificacion;
 using VideoClub.WebMVC.Models.Genero;
 using VideoClub.WebMVC.Models.Pelicula;
+using VideoClub.WebMVC.Models.Provincias;
 using VideoClub.WebMVC.Models.Soporte;
 
 namespace VideoClub.WebMVC.Mapping
@@ -19,6 +20,7 @@ namespace VideoClub.WebMVC.Mapping
             LoadPeliculasMapping();
             LoadGeneroMapping();
             LoadSoporteMapping();
+            LoadProvinciaMapping();
         }
 
         private void LoadPeliculasMapping()
@@ -57,5 +59,9 @@ namespace VideoClub.WebMVC.Mapping
             CreateMap<Soporte, SoporteEditVm>().ReverseMap();
         }
 
+        private void LoadProvinciaMapping()
+        {
+            CreateMap<Provincia, ProvinciaEditVm>().ReverseMap();
+        }
     }
 }
