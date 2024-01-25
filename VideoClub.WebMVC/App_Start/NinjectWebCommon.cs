@@ -82,6 +82,12 @@ namespace VideoClub.WebMVC.App_Start
             kernel.Bind<IRepositorioPeliculas>().To<RepositorioPeliculas>().InRequestScope();
             kernel.Bind<IServicioPeliculas>().To<ServicioPeliculas>().InRequestScope();
 
+            kernel.Bind<IRepositorioProvincias>().To<RepositorioProvincias>().InRequestScope();
+            kernel.Bind<IServicioProvincias>().To<ServicioProvincias>().InRequestScope();
+
+            kernel.Bind<IRepositorioLocalidades>().To<RepositorioLocalidades>().InRequestScope();
+            kernel.Bind<IServicioLocalidades>().To<ServicioLocalidades>().InRequestScope();
+
             kernel.Bind<IUnitOfWork>().To<UnitOfWork>().InRequestScope();
 
             kernel.Bind<VideoClubDbContext>().ToSelf().InThreadScope();

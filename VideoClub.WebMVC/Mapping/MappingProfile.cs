@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using VideoClub.Entidades.Entidades;
 using VideoClub.WebMVC.Models.Calificacion;
+using VideoClub.WebMVC.Models.Estado;
 using VideoClub.WebMVC.Models.Genero;
 using VideoClub.WebMVC.Models.Pelicula;
 using VideoClub.WebMVC.Models.Provincias;
@@ -21,6 +22,7 @@ namespace VideoClub.WebMVC.Mapping
             LoadGeneroMapping();
             LoadSoporteMapping();
             LoadProvinciaMapping();
+            LoadEstadoMapping();
         }
 
         private void LoadPeliculasMapping()
@@ -62,6 +64,10 @@ namespace VideoClub.WebMVC.Mapping
         private void LoadProvinciaMapping()
         {
             CreateMap<Provincia, ProvinciaEditVm>().ReverseMap();
+        }
+        private void LoadEstadoMapping()
+        {
+            CreateMap<Estado, EstadoEditVm>().ReverseMap();
         }
     }
 }

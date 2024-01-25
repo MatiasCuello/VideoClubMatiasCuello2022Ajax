@@ -141,6 +141,7 @@
     <Compile Include="Controllers\EstadoController.cs" />
     <Compile Include="Controllers\GeneroController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LocalidadController.cs" />
     <Compile Include="Controllers\PeliculaController.cs" />
     <Compile Include="Controllers\ProvinciasController.cs" />
     <Compile Include="Controllers\SoporteController.cs" />
@@ -149,6 +150,7 @@
     </Compile>
     <Compile Include="Mapping\MappingProfile.cs" />
     <Compile Include="Models\Calificacion\CalificacionEditVm.cs" />
+    <Compile Include="Models\Estado\EstadoEditVm.cs" />
     <Compile Include="Models\Genero\GeneroEditVm.cs" />
     <Compile Include="Models\Pelicula\PeliculaEditVm.cs" />
     <Compile Include="Models\Pelicula\PeliculaListVm.cs" />
@@ -507,10 +509,13 @@
     <Content Include="Views\Pelicula\Index.cshtml" />
     <Content Include="Views\Provincias\Index.cshtml" />
     <Content Include="Views\Provincias\Create.cshtml" />
+    <Content Include="Views\Provincias\Delete.cshtml" />
+    <Content Include="Views\Provincias\Edit.cshtml" />
+    <Content Include="Views\Estado\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Estado\" />
+    <Folder Include="Views\Localidad\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />

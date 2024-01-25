@@ -1,0 +1,55 @@
+﻿@model List<VideoClub.Entidades.Entidades.Estado>
+@{ ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml"; }
+<ol class="breadcrumb mt-4 mb-4 ">
+    <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+    <li class="breadcrumb-item active">Estados</li>
+</ol>
+<div class="card">
+    <h5 class="card-header bg-primary text-white">
+        <i class="fas fa-star"></i>
+        Listado de Estados
+
+    </h5>
+    <div class="card-body">
+        <a href="@Url.Action("Create","Estado")" class="btn btn-primary"><i class="fas fa-plus"></i> Nuevo</a>
+        <hr />
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Estado</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            @if (Model.Count == 0)
+            {
+                <tr>
+                    <td>
+                        No hay registros todavía
+                    </td>
+                </tr>
+            }
+            else
+            {
+                foreach (var estado in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => estado.Descripcion)</td>
+                        <td>
+                            @Html.ActionLink("Editar", "Edit", new { id = estado.EstadoId }, new { @class = "btn btn-warning" })
+                            @Html.ActionLink("Borrar", "Delete", new { id = estado.EstadoId }, new { @class = "btn btn-danger" })
+
+                        </td>
+                    </tr>
+
+                }
+            }
+            </tbody>
+        </table>
+
+    </div>
+    <div class="card-footer text-muted">
+        Cantidad de registros: <strong>@Model.Count</strong>
+    </div>
+</div>

@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="EntityTypeConfigurations\EstadosEntityTypeConfigurations.cs" />
     <Compile Include="EntityTypeConfigurations\GenerosEntityTypeConfigurations.cs" />
+    <Compile Include="EntityTypeConfigurations\LocalidadesEntityTypeConfiguration.cs" />
     <Compile Include="EntityTypeConfigurations\PeliculasEntityTypeConfiguration.cs" />
     <Compile Include="EntityTypeConfigurations\ProvinciasEntityTypeConfiguration.cs" />
     <Compile Include="EntityTypeConfigurations\SoportesEntityTypeConfiguration.cs" />
@@ -62,9 +63,11 @@
     <Compile Include="Repositorios\Facades\IRepositorioCalificaciones.cs" />
     <Compile Include="Repositorios\Facades\IRepositorioEstados.cs" />
     <Compile Include="Repositorios\Facades\IRepositorioGeneros.cs" />
+    <Compile Include="Repositorios\Facades\IRepositorioLocalidades.cs" />
     <Compile Include="Repositorios\Facades\IRepositorioPeliculas.cs" />
     <Compile Include="Repositorios\Facades\IRepositorioProvincias.cs" />
     <Compile Include="Repositorios\Facades\IRepositorioSoportes.cs" />
+    <Compile Include="Repositorios\RepositorioLocalidades.cs" />
     <Compile Include="Repositorios\RepositorioPeliculas.cs" />
     <Compile Include="Repositorios\RepositorioCalificaciones.cs" />
     <Compile Include="Repositorios\RepositorioEstados.cs" />
