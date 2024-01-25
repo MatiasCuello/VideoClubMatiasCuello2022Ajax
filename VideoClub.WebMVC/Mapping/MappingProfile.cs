@@ -17,6 +17,8 @@ namespace VideoClub.WebMVC.Mapping
         {
             LoadCalificacionMapping();
             LoadPeliculasMapping();
+            LoadGeneroMapping();
+            LoadSoporteMapping();
         }
 
         private void LoadPeliculasMapping()

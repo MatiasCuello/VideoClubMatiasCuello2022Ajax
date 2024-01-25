@@ -29,6 +29,6 @@ namespace VideoClub.Repositorios
         public DbSet<Genero> Generos { get; set; }
         public DbSet<Pelicula> Peliculas { get; set; }
         public DbSet<Soporte> Soportes { get; set; }
-
+        public DbSet<Provincia> Provincias { get; set; }
     }
 }

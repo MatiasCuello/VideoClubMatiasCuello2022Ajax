@@ -54,6 +54,7 @@
     <Compile Include="EntityTypeConfigurations\EstadosEntityTypeConfigurations.cs" />
     <Compile Include="EntityTypeConfigurations\GenerosEntityTypeConfigurations.cs" />
     <Compile Include="EntityTypeConfigurations\PeliculasEntityTypeConfiguration.cs" />
+    <Compile Include="EntityTypeConfigurations\ProvinciasEntityTypeConfiguration.cs" />
     <Compile Include="EntityTypeConfigurations\SoportesEntityTypeConfiguration.cs" />
     <Compile Include="IUnitOfWork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -62,11 +63,13 @@
     <Compile Include="Repositorios\Facades\IRepositorioEstados.cs" />
     <Compile Include="Repositorios\Facades\IRepositorioGeneros.cs" />
     <Compile Include="Repositorios\Facades\IRepositorioPeliculas.cs" />
+    <Compile Include="Repositorios\Facades\IRepositorioProvincias.cs" />
     <Compile Include="Repositorios\Facades\IRepositorioSoportes.cs" />
     <Compile Include="Repositorios\RepositorioPeliculas.cs" />
     <Compile Include="Repositorios\RepositorioCalificaciones.cs" />
     <Compile Include="Repositorios\RepositorioEstados.cs" />
     <Compile Include="Repositorios\RepositorioGeneros.cs" />
+    <Compile Include="Repositorios\RepositorioProvincias.cs" />
     <Compile Include="Repositorios\RepositorioSoportes.cs" />
     <Compile Include="UnitOfWork.cs" />
     <Compile Include="VideoClubDbContext.cs" />

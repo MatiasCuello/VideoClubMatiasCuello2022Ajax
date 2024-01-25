@@ -46,8 +46,10 @@
     <Compile Include="Servicios\Facades\IServicioEstados.cs" />
     <Compile Include="Servicios\Facades\IServicioGeneros.cs" />
     <Compile Include="Servicios\Facades\IServicioPeliculas.cs" />
+    <Compile Include="Servicios\Facades\IServicioProvincias.cs" />
     <Compile Include="Servicios\Facades\IServicioSoportes.cs" />
     <Compile Include="Servicios\ServicioPeliculas.cs" />
+    <Compile Include="Servicios\ServicioProvincias.cs" />
     <Compile Include="Servicios\ServicioSoportes.cs" />
     <Compile Include="Servicios\ServicioCalificaciones.cs" />
     <Compile Include="Servicios\ServicioEstados.cs" />
