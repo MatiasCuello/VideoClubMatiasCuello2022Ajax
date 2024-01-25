@@ -24,6 +24,20 @@ namespace VideoClub.Servicios.Servicios
             this.unitOfWork = unitOfWork;
         }
 
+        public void Borrar(Estado estado)
+        {
+
+            try
+            {
+                repositorio.Borrar(estado);
+                unitOfWork.Save();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
         public bool EstaRelacionado(Estado estado)
         {
             try

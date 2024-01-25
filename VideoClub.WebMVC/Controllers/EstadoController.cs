@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using AutoMapper;
@@ -67,7 +68,93 @@ namespace VideoClub.WebMVC.Controllers
                 return View(estadoEditVm);
             }
         }
-    
 
+        [HttpGet]
+        public ActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            Estado estado = servicio.GetEstadoPorId(id.Value);
+            if (estado == null)
+            {
+                return HttpNotFound("El codigo del estado no existe!");
+            }
+
+            EstadoEditVm estadoEditVm = mapper.Map<EstadoEditVm>(estado);
+            return View(estadoEditVm);
+
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(EstadoEditVm estadoEditVm)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(estadoEditVm);
+            }
+
+            Estado estado = mapper.Map<Estado>(estadoEditVm);
+            try
+            {
+                if (servicio.Existe(estado))
+                {
+                    ModelState.AddModelError(string.Empty, "Estado existente!");
+                    return View(estadoEditVm);
+                }
+                servicio.Guardar(estado);
+                return RedirectToAction("Index");
+            }
+            catch (Exception e)
+            {
+                ModelState.AddModelError(string.Empty, e.Message);
+                return View(estadoEditVm);
+            }
+        }
+        [HttpGet]
+        public ActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            }
+
+            Estado estado = servicio.GetEstadoPorId(id.Value);
+            if (estado == null)
+            {
+                return HttpNotFound("El codigo del estado no existe!");
+            }
+
+            EstadoEditVm estadoEditVm = mapper.Map<EstadoEditVm>(estado);
+            return View(estadoEditVm);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirm(int id)
+        {
+            Estado estado = servicio.GetEstadoPorId(id);
+            try
+            {
+                if (servicio.EstaRelacionado(estado))
+                {
+                    EstadoEditVm estadoEditVm = mapper.Map<EstadoEditVm>(estado);
+                    ModelState.AddModelError(string.Empty, "Estado relacionado!");
+                    return View(estadoEditVm);
+                }
+
+                servicio.Borrar(estado);
+                return RedirectToAction("Index");
+            }
+            catch (Exception e)
+            {
+                EstadoEditVm estadoEditVm = mapper.Map<EstadoEditVm>(estado);
+                ModelState.AddModelError(string.Empty, e.Message);
+                return View(estadoEditVm);
+            }
+        }
     }
 }

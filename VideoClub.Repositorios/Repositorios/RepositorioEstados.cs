@@ -23,6 +23,19 @@ namespace VideoClub.Repositorios.Repositorios
             return false;
         }
 
+        public void Borrar(Estado estado)
+        {
+            try
+            {
+                context.Entry(estado).State = EntityState.Deleted;
+                //context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
         public bool Existe(Estado estado)
         {
             try

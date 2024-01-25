@@ -14,5 +14,6 @@ namespace VideoClub.Servicios.Servicios.Facades
         void Guardar(Estado estado);
         bool Existe(Estado estado);
         bool EstaRelacionado(Estado estado);
+        void Borrar(Estado estado);
     }
 }

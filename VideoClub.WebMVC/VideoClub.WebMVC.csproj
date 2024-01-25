@@ -512,6 +512,9 @@
     <Content Include="Views\Provincias\Delete.cshtml" />
     <Content Include="Views\Provincias\Edit.cshtml" />
     <Content Include="Views\Estado\Index.cshtml" />
+    <Content Include="Views\Estado\Create.cshtml" />
+    <Content Include="Views\Estado\Edit.cshtml" />
+    <Content Include="Views\Estado\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
