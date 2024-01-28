@@ -23,11 +23,11 @@ namespace VideoClub.Servicios.Servicios
             this.unitOfWork = unitOfWork;
 
         }
-        public List<Localidad> GetLista()
+        public List<Localidad> GetLista2()
         {
             try
             {
-                return repositorio.GetLista();
+                return repositorio.GetLista2();
             }
             catch (Exception e)
             {
@@ -89,6 +89,19 @@ namespace VideoClub.Servicios.Servicios
             {
 
                 throw new Exception(e.Message);
+            }
+        }
+
+        public List<Localidad> GetLista(int provinciaId)
+        {
+            try
+            {
+                return repositorio.GetLista(provinciaId);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
             }
         }
     }

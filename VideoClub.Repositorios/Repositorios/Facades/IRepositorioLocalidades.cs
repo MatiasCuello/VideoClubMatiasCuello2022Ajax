@@ -9,7 +9,8 @@ namespace VideoClub.Repositorios.Repositorios.Facades
 {
     public interface IRepositorioLocalidades
     {
-        List<Localidad> GetLista();
+        List<Localidad> GetLista(int provinciaId);
+        List<Localidad> GetLista2();
         void Guardar(Localidad localidad);
         bool Existe(Localidad localidad);
         void Borrar(Localidad localidad);

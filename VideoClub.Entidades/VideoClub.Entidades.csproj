@@ -41,6 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DTOs\LocalidadListDto.cs" />
+    <Compile Include="DTOs\ProvinciasListDto.cs" />
     <Compile Include="Entidades\Calificacion.cs" />
     <Compile Include="Entidades\Estado.cs" />
     <Compile Include="Entidades\Genero.cs" />
@@ -50,5 +52,6 @@
     <Compile Include="Entidades\Soporte.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

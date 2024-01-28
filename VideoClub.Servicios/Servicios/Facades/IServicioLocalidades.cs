@@ -9,7 +9,8 @@ namespace VideoClub.Servicios.Servicios.Facades
 {
     public interface IServicioLocalidades
     {
-        List<Localidad> GetLista();
+        List<Localidad> GetLista2();
+        List<Localidad> GetLista(int provinciaId);
         void Guardar(Localidad localidad);
         bool Existe(Localidad localidad);
         void Borrar(Localidad localidad);

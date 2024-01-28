@@ -12,7 +12,7 @@ namespace VideoClub.Entidades.Entidades
         public string NombreLocalidad { get; set; }
         public int ProvinciaId { get; set; }
 
-        public Provincia Provincia { get; set; }
+        public virtual Provincia Provincia { get; set; }
         public object Clone()
         {
             return this.MemberwiseClone();

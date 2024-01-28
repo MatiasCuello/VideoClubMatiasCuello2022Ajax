@@ -152,6 +152,8 @@
     <Compile Include="Models\Calificacion\CalificacionEditVm.cs" />
     <Compile Include="Models\Estado\EstadoEditVm.cs" />
     <Compile Include="Models\Genero\GeneroEditVm.cs" />
+    <Compile Include="Models\Localidad\LocalidadEditVm.cs" />
+    <Compile Include="Models\Localidad\LocalidadListVm.cs" />
     <Compile Include="Models\Pelicula\PeliculaEditVm.cs" />
     <Compile Include="Models\Pelicula\PeliculaListVm.cs" />
     <Compile Include="Models\Provincias\ProvinciaEditVm.cs" />
@@ -515,10 +517,11 @@
     <Content Include="Views\Estado\Create.cshtml" />
     <Content Include="Views\Estado\Edit.cshtml" />
     <Content Include="Views\Estado\Delete.cshtml" />
+    <Content Include="Views\Localidad\Index.cshtml" />
+    <Content Include="Views\Localidad\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Localidad\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />

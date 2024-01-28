@@ -65,65 +65,75 @@ namespace VideoClub.Repositorios.Repositorios
             }
         }
 
-        public List<Localidad> GetLista()
-        {
-            try
-            {
-                return context.Localidades
-                    .Include(l => l.Provincia)
-                    .ToList();
 
-            }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message);
-            }
-        }
 
         public void Guardar(Localidad localidad)
         {
-            try
+
+            if (localidad.Provincia != null)
             {
-                if (localidad.Provincia != null)
-                {
-                    localidad.Provincia = null;
-                }
-
-                if (localidad.LocalidadId == 0)
-                {
-                    context.Localidades.Add(localidad);
-                }
-
-                else
-                {
-                    var localidadInDb = context.Localidades.SingleOrDefault(l => l.LocalidadId == localidad.LocalidadId);
-                    localidadInDb.LocalidadId = localidad.LocalidadId;
-                    localidadInDb.NombreLocalidad = localidad.NombreLocalidad;
-                    localidadInDb.ProvinciaId = localidad.ProvinciaId;
-
-                    context.Entry(localidadInDb).State = EntityState.Modified;
-                }
+                context.Provincias.Attach(localidad.Provincia);
 
             }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message);
-            }
 
+            if (localidad.LocalidadId == 0)
+            {
+                //Cuando el id=0 entonces la entidad es nueva ==>alta
+                context.Localidades.Add(localidad);
+
+            }
+            else
+            {
+                var localidadInDb =
+                    context.Localidades.SingleOrDefault(l => l.LocalidadId == localidad.LocalidadId);
+                if (localidadInDb == null)
+                {
+                    throw new Exception("Localidad inexistente");
+                }
+
+                localidadInDb.NombreLocalidad = localidad.NombreLocalidad;
+                localidadInDb.ProvinciaId = localidad.ProvinciaId;
+                context.Entry(localidadInDb).State = EntityState.Modified;
+
+            }
         }
 
         public Localidad GetLocalidadPorId(int id)
         {
             try
             {
-                return context.Localidades
-                    .Include(l => l.Provincia)
-                    .SingleOrDefault(l => l.LocalidadId == id);
+                return context.Localidades.SingleOrDefault(l => l.LocalidadId == id);
             }
             catch (Exception e)
             {
+                throw new Exception("Error");
+            }
+        }
 
-                throw e;
+        public List<Localidad> GetLista(int provinciaId)
+        {
+            try
+            {
+                return context.Localidades.Where(l => l.ProvinciaId == provinciaId)
+                    .OrderBy(l =>l.NombreLocalidad)
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al intentar leer la tabla de Localidades");
+            }
+        }
+        public List<Localidad> GetLista2()
+        {
+            try
+            {
+                return context.Localidades.Include(l => l.Provincia).OrderBy(l => l.Provincia.NombreProvincia)
+                    .ThenBy(l => l.NombreLocalidad)
+                    .ToList();
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Error al intentar leer la tabla de Ciudades");
             }
         }
     }
