@@ -53,11 +53,13 @@ namespace VideoClub.Repositorios.Repositorios
             {
                 if (localidad.LocalidadId == 0)
                 {
-                    return context.Localidades
-                        .Any(l => l.NombreLocalidad == localidad.NombreLocalidad);
+                    return context.Localidades.Any(l => l.NombreLocalidad == localidad.NombreLocalidad &&
+                                                      l.ProvinciaId == localidad.ProvinciaId);
                 }
 
-                return context.Localidades.Any(l => l.NombreLocalidad == localidad.NombreLocalidad && l.LocalidadId == localidad.LocalidadId);
+                return context.Localidades.Any(l => l.NombreLocalidad == localidad.NombreLocalidad
+                                                  && l.ProvinciaId == localidad.ProvinciaId
+                                                  && l.LocalidadId != localidad.LocalidadId);
             }
             catch (Exception e)
             {
