@@ -10,6 +10,7 @@ using VideoClub.WebMVC.Models.Genero;
 using VideoClub.WebMVC.Models.Localidad;
 using VideoClub.WebMVC.Models.Pelicula;
 using VideoClub.WebMVC.Models.Provincias;
+using VideoClub.WebMVC.Models.Socio;
 using VideoClub.WebMVC.Models.Soporte;
 
 namespace VideoClub.WebMVC.Mapping
@@ -25,6 +26,7 @@ namespace VideoClub.WebMVC.Mapping
             LoadProvinciaMapping();
             LoadEstadoMapping();
             LoadLocalidadesMapping();
+            LoadSocioMapping();
         }
 
         private void LoadPeliculasMapping()
@@ -78,6 +80,23 @@ namespace VideoClub.WebMVC.Mapping
                 .ForMember(dest => dest.Provincia, opt => opt.MapFrom(src => src.Provincia.NombreProvincia));
             CreateMap<Localidad, LocalidadEditVm>().ReverseMap();
          
+        }
+        private void LoadSocioMapping()
+        {
+            CreateMap<Socio, SocioListVm>().ReverseMap();
+            CreateMap<Socio, SocioListVm>()
+                .ForMember(dest => dest.TipoDeDocumento,
+                    opt => opt.MapFrom(src => src.TipoDeDocumento));
+            CreateMap<Socio, SocioListVm>()
+                .ForMember(dest => dest.Localidad,
+                    opt => opt.MapFrom(src => src.Localidad));
+            CreateMap<Socio, SocioListVm>()
+                .ForMember(dest => dest.Provincia,
+                    opt => opt.MapFrom(src => src.Provincia));
+            CreateMap<Socio, SocioListVm>()
+                .ForMember(dest => dest.FechaDeNacimiento,
+                    opt => opt.MapFrom(src => src.FechaDeNacimiento.ToShortDateString()));
+
         }
     }
 }

@@ -24,19 +24,18 @@ namespace VideoClub.WebMVC.Controllers
         {
             this.servicio = servicio;
             this.servicioProvincias = servicioProvincias;
-            ;
             mapper = AutoMapperConfig.Mapper;
         }
 
         // GET: Localidades
         public ActionResult Index()
         {
-            var listaCiudadesVm = mapper.Map<List<LocalidadListVm>>(servicio.GetLista2());
-            listaCiudadesVm = listaCiudadesVm
+            var localidadEditVm = mapper.Map<List<LocalidadListVm>>(servicio.GetLista2());
+            localidadEditVm = localidadEditVm
                 .OrderBy(c => c.NombreLocalidad)
                 .ThenBy(c => c.Provincia)
                 .ToList();
-            return View(listaCiudadesVm);
+            return View(localidadEditVm);
         }
         public ActionResult Create()
         {

@@ -49,7 +49,9 @@
     <Compile Include="Entidades\Localidad.cs" />
     <Compile Include="Entidades\Pelicula.cs" />
     <Compile Include="Entidades\Provincia.cs" />
+    <Compile Include="Entidades\Socio.cs" />
     <Compile Include="Entidades\Soporte.cs" />
+    <Compile Include="Entidades\TipoDeDocumento.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

@@ -30,7 +30,8 @@ namespace VideoClub.Repositorios
         public DbSet<Pelicula> Peliculas { get; set; }
         public DbSet<Soporte> Soportes { get; set; }
         public DbSet<Provincia> Provincias { get; set; }
-
         public DbSet<Localidad> Localidades { get; set; }
+        public DbSet<TipoDeDocumento> TiposDeDocumentos { get; set; }
+        public DbSet<Socio> Socios { get; set; }
     }
 }

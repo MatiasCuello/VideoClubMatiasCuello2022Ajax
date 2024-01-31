@@ -144,7 +144,9 @@
     <Compile Include="Controllers\LocalidadController.cs" />
     <Compile Include="Controllers\PeliculaController.cs" />
     <Compile Include="Controllers\ProvinciasController.cs" />
+    <Compile Include="Controllers\SocioController.cs" />
     <Compile Include="Controllers\SoporteController.cs" />
+    <Compile Include="Controllers\TipoDeDocumentoController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -157,7 +159,9 @@
     <Compile Include="Models\Pelicula\PeliculaEditVm.cs" />
     <Compile Include="Models\Pelicula\PeliculaListVm.cs" />
     <Compile Include="Models\Provincias\ProvinciaEditVm.cs" />
+    <Compile Include="Models\Socio\SocioListVm.cs" />
     <Compile Include="Models\Soporte\SoporteEditVm.cs" />
+    <Compile Include="Models\Tipo de Documento\TipoDeDocumentoEditVm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -521,6 +525,8 @@
     <Content Include="Views\Localidad\Create.cshtml" />
     <Content Include="Views\Localidad\Edit.cshtml" />
     <Content Include="Views\Localidad\Delete.cshtml" />
+    <Content Include="Views\TipoDeDocumento\Index.cshtml" />
+    <Content Include="Views\Socio\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

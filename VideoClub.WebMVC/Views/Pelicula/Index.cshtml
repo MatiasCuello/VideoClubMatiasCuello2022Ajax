@@ -205,16 +205,19 @@
                             return data.Descripcion;
                         }
                     },
-                    //{
-                    //    "data": "FechaIncorporacion"
-                    //},
+                    {
+                        "data": "FechaIncorporacion"
+                    },
                     {
                         "data": "Estado",
                         render: function(data) {
                             return data.Descripcion;
                         }
                     },
-                    { "data": "DuracionEnMinutos" },
+                    {
+                        "data": "DuracionEnMinutos" 
+
+                    },
                     {
                         "data": "Calificacion",
                         render: function(data) {
@@ -471,8 +474,7 @@
                             size: 14
 
                         });
-                    $("#FormModal").modal('hide');
-                    tablaPeliculas.ajax.reload();
+                    
 
 
                 }
