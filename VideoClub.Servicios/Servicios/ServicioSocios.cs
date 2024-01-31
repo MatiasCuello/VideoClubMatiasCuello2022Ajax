@@ -11,12 +11,12 @@ using VideoClub.Servicios.Servicios.Facades;
 
 namespace VideoClub.Servicios.Servicios
 {
-    public class ServicioSocio:IServicioSocios
+    public class ServicioSocios:IServicioSocios
     {
         private readonly IReposiorioSocios repositorio;
         private readonly VideoClubDbContext context;
 
-        public ServicioSocio()
+        public ServicioSocios()
         {
             repositorio = new RepositorioSocios();
             context = new VideoClubDbContext();

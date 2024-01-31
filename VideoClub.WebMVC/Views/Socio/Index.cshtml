@@ -1,6 +1,7 @@
-﻿@*@model List<VideoClub.Entidades.Entidades.Socio>*@
-@{ ViewBag.Title = "index"; }
-    @*//Layout = "~/Views/Shared/_Layout.cshtml"; }*@
+﻿@model List<VideoClub.Entidades.Entidades.Socio>
+@{ ViewBag.Title = "index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
 <ol class="breadcrumb mt-4 mb-4 ">
     <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
     <li class="breadcrumb-item active">Socios</li>
@@ -19,14 +20,14 @@
                 <tr>
                     <th>Nombre</th>
                     <th>Apellido</th>
-                    <th>Tipo Documento</th>
-                    <th>Nro Documento</th>
+                    <th>Tipo Doc</th>
+                    <th>Nro Doc</th>
                     <th>Direccion</th>
                     <th>Localidad</th>
                     <th>Provincia</th>
-                    <th>Telefono Fijo</th>
-                    <th>Telefono Movil</th>
-                    <th>Correo Electronico</th>
+                    <th>Tel. Fijo</th>
+                    <th>Tel. Movil</th>
+                    <th>Correo</th>
                     <th>Fecha Nac</th>
                     <th>Sancionado</th>
                     <th>Activo</th>
@@ -71,18 +72,15 @@
                         <input type="text" class="form-control" id="txtApellido" placeholder="Ingrese Apellido">
                     </div>
                     <div class="col-md-6">
-                        <label for="txtFechaNacimiento" class="form-label">Fecha De Nacimiento</label>
-                        <input type="text" class="form-control" id="txtNumeroDeDocumento" placeholder="Ingrese Numero De Documento">
+                        <label for="cboTipoDocumento" class="form-label">Tipo De Documento</label>
+                        <select id="cboTipoDocumento" class="form-select" aria-label="Default select example">
+                        </select>
                     </div>
                     <div class="col-md-6">
                         <label for="txtNumeroDeDocumento" class="form-label">Numero De Documento</label>
                         <input type="text" class="form-control" id="txtNumeroDeDocumento" placeholder="Ingrese Numero De Documento">
                     </div>
-                    <div class="col-md-6">
-                        <label for="cboTipoDocumento" class="form-label">Tipo De Documento</label>
-                        <select id="cboTipoDocumento" class="form-select" aria-label="Default select example">
-                        </select>
-                    </div>
+
                     <div class="col-md-6">
                         <label for="txtDireccion" class="form-label">Direccion</label>
                         <input type="text" class="form-control" id="txtDireccion" placeholder="Ingrese Direccion">
@@ -225,7 +223,9 @@
                 },
                 "columns": [
                     { "data": "Nombre" },
+
                     { "data": "Apellido" },
+
                     {
                         "data": "TipoDeDocumento",
                         render: function (data) {
@@ -234,7 +234,9 @@
 
                     },
                     { "data": "NroDocumento" },
+
                     { "data": "Direccion" },
+
                     {
                         "data": "Localidad",
                         render: function (data) {
@@ -250,9 +252,13 @@
 
                     },
                     { "data": "TelefonoFijo" },
+
                     { "data": "TelefonoMovil" },
+
                     { "data": "CorreoElectronico" },
+
                     { "data": "FechaDeNacimiento" },
+
                     {
                         "data": "Sancionado",
                         render: function(valorDeAlquilado) {
@@ -280,8 +286,8 @@
                     {
                         "defaultContent":
 
-                            '<button type="button" class="btn btn-warning mx-3 btn-editar"  >Editar</button>' +
-                                '<button type="button" class="btn btn-danger btn-borrar" >Borrar</button>',
+                            '<button type="button" class="btn btn-warning mx-3 btn-editar"  ><i class="fas fa-pen"></i></button>' +
+                                '<button type="button" class="btn btn-danger btn-borrar" ><i class="fas fa-trash"></i></button>',
                         "orderable": false,
                         "searchable": false,
                     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
@@ -12,20 +13,25 @@ namespace VideoClub.WebMVC.Models.Socio
         public string Nombre { get; set; }
         public string Apellido { get; set; }
 
-        [Display(Name = "TipoDeDocumento")]
+        [DisplayName("Tipo Doc")]
         public int TipoDeDocumentoId { get; set; }
+
+        [DisplayName("Nro Doc")]
         public string NumeroDeDocumento { get; set; }
 
         public string Direccion { get; set; }
 
-        [Display(Name = "Localidad")]
+        [DisplayName("Localidad")]
         public int LocalidadId { get; set; }
 
-        [Display(Name = "Provincia")]
+        [DisplayName("Provincia")]
         public int ProvinciaId { get; set; }
+
+        [DisplayName("Correo")]
         public string CorreoElectronico { get; set; }
 
-        public DateTime FechaDeNacimiento { get; set; }
+        [DisplayName("FechaNac")]
+        public string FechaDeNacimiento { get; set; }
         public bool Activa { get; set; } = true;
         public bool Alquilado { get; set; } = false;
 

@@ -68,10 +68,11 @@ namespace VideoClub.Repositorios.Repositorios
         {
             try
             {
-                return context.Socios.Include(p => p.TipoDeDocumento)
+                return context.Socios
+                    .Include(p => p.TipoDeDocumento)
                     .Include(p => p.Localidad)
                     .Include(p => p.Provincia)
-                    .AsNoTracking().ToList();
+                    .ToList();
 
             }
             catch (Exception e)
@@ -84,7 +85,8 @@ namespace VideoClub.Repositorios.Repositorios
         {
             try
             {
-                return context.Socios.SingleOrDefault(s => s.SocioId == id);
+                return context.Socios
+                    .SingleOrDefault(s => s.SocioId == id);
             }
             catch (Exception e)
             {

@@ -83,7 +83,9 @@ namespace VideoClub.WebMVC.Mapping
         }
         private void LoadSocioMapping()
         {
-            CreateMap<Socio, SocioListVm>().ReverseMap();
+            CreateMap<Socio, SocioListVm>()
+                .ForMember(dest => dest.FechaDeNacimiento,
+                    opt => opt.MapFrom(src => src.FechaDeNacimiento.ToShortDateString()));
             CreateMap<Socio, SocioListVm>()
                 .ForMember(dest => dest.TipoDeDocumento,
                     opt => opt.MapFrom(src => src.TipoDeDocumento));
@@ -93,9 +95,6 @@ namespace VideoClub.WebMVC.Mapping
             CreateMap<Socio, SocioListVm>()
                 .ForMember(dest => dest.Provincia,
                     opt => opt.MapFrom(src => src.Provincia));
-            CreateMap<Socio, SocioListVm>()
-                .ForMember(dest => dest.FechaDeNacimiento,
-                    opt => opt.MapFrom(src => src.FechaDeNacimiento.ToShortDateString()));
 
         }
     }
