@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using VideoClub.Entidades.Entidades;
 using VideoClub.WebMVC.Models.Calificacion;
+using VideoClub.WebMVC.Models.Empleado;
 using VideoClub.WebMVC.Models.Estado;
 using VideoClub.WebMVC.Models.Genero;
 using VideoClub.WebMVC.Models.Localidad;
@@ -27,6 +28,36 @@ namespace VideoClub.WebMVC.Mapping
             LoadEstadoMapping();
             LoadLocalidadesMapping();
             LoadSocioMapping();
+            LoadEmpleadoMapping();
+        }
+
+        private void LoadEmpleadoMapping()
+        {
+            CreateMap<Empleado, EmpleadoListVm>()
+                .ForMember(dest => dest.TipoDeDocumento,
+                    opt => opt.MapFrom(src => src.TipoDeDocumento));
+            CreateMap<Empleado, EmpleadoListVm>()
+                .ForMember(dest => dest.Localidad,
+                    opt => opt.MapFrom(src => src.Localidad));
+            CreateMap<Empleado, EmpleadoListVm>()
+                .ForMember(dest => dest.Provincia,
+                    opt => opt.MapFrom(src => src.Provincia));
+        }
+
+        private void LoadSocioMapping()
+        {
+            CreateMap<Socio, SocioListVm>()
+                .ForMember(dest => dest.TipoDeDocumento,
+                    opt => opt.MapFrom(src => src.TipoDeDocumento));
+            CreateMap<Socio, SocioListVm>()
+                .ForMember(dest => dest.Localidad,
+                    opt => opt.MapFrom(src => src.Localidad));
+            CreateMap<Socio, SocioListVm>()
+                .ForMember(dest => dest.Provincia,
+                    opt => opt.MapFrom(src => src.Provincia));
+            CreateMap<Socio, SocioListVm>()
+                .ForMember(dest => dest.FechaDeNacimiento, 
+                    opt => opt.MapFrom(src => src.FechaDeNacimiento.ToShortDateString()));
         }
 
         private void LoadPeliculasMapping()
@@ -81,21 +112,6 @@ namespace VideoClub.WebMVC.Mapping
             CreateMap<Localidad, LocalidadEditVm>().ReverseMap();
          
         }
-        private void LoadSocioMapping()
-        {
-            CreateMap<Socio, SocioListVm>()
-                .ForMember(dest => dest.FechaDeNacimiento,
-                    opt => opt.MapFrom(src => src.FechaDeNacimiento.ToShortDateString()));
-            CreateMap<Socio, SocioListVm>()
-                .ForMember(dest => dest.TipoDeDocumento,
-                    opt => opt.MapFrom(src => src.TipoDeDocumento));
-            CreateMap<Socio, SocioListVm>()
-                .ForMember(dest => dest.Localidad,
-                    opt => opt.MapFrom(src => src.Localidad));
-            CreateMap<Socio, SocioListVm>()
-                .ForMember(dest => dest.Provincia,
-                    opt => opt.MapFrom(src => src.Provincia));
 
-        }
     }
 }

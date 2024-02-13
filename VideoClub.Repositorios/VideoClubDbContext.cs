@@ -33,5 +33,6 @@ namespace VideoClub.Repositorios
         public DbSet<Localidad> Localidades { get; set; }
         public DbSet<TipoDeDocumento> TiposDeDocumentos { get; set; }
         public DbSet<Socio> Socios { get; set; }
+        public DbSet<Empleado> Empleados { get; set; }
     }
 }

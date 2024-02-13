@@ -26,7 +26,7 @@ namespace VideoClub.WebMVC.Controllers
         }
 
         [HttpGet]
-        public JsonResult ListarDocumentos()
+        public JsonResult ListarTiposDeDocumentos()
         {
             var lista = servicio.GetLista();
             return Json(new { data = lista }, JsonRequestBehavior.AllowGet);

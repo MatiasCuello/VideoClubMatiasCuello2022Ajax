@@ -138,6 +138,7 @@
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\CalificacionController.cs" />
+    <Compile Include="Controllers\EmpleadoController.cs" />
     <Compile Include="Controllers\EstadoController.cs" />
     <Compile Include="Controllers\GeneroController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -152,6 +153,7 @@
     </Compile>
     <Compile Include="Mapping\MappingProfile.cs" />
     <Compile Include="Models\Calificacion\CalificacionEditVm.cs" />
+    <Compile Include="Models\Empleado\EmpleadoListVm.cs" />
     <Compile Include="Models\Estado\EstadoEditVm.cs" />
     <Compile Include="Models\Genero\GeneroEditVm.cs" />
     <Compile Include="Models\Localidad\LocalidadEditVm.cs" />
@@ -159,6 +161,7 @@
     <Compile Include="Models\Pelicula\PeliculaEditVm.cs" />
     <Compile Include="Models\Pelicula\PeliculaListVm.cs" />
     <Compile Include="Models\Provincias\ProvinciaEditVm.cs" />
+    <Compile Include="Models\Socio\SocioEditVm.cs" />
     <Compile Include="Models\Socio\SocioListVm.cs" />
     <Compile Include="Models\Soporte\SoporteEditVm.cs" />
     <Compile Include="Models\Tipo de Documento\TipoDeDocumentoEditVm.cs" />
@@ -527,6 +530,7 @@
     <Content Include="Views\Localidad\Delete.cshtml" />
     <Content Include="Views\TipoDeDocumento\Index.cshtml" />
     <Content Include="Views\Socio\Index.cshtml" />
+    <Content Include="Views\Empleado\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

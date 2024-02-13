@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
-namespace VideoClub.WebMVC.Models.Socio
+namespace VideoClub.WebMVC.Models.Empleado
 {
-    public class SocioListVm
+    public class EmpleadoListVm
     {
-        public int SocioId { get; set; }
+        public int EmpleadoId { get; set; }
         public string Nombre { get; set; }
         public string Apellido { get; set; }
 
@@ -18,7 +17,6 @@ namespace VideoClub.WebMVC.Models.Socio
 
         [DisplayName("Nro Doc")]
         public string NroDocumento { get; set; }
-
         public string Direccion { get; set; }
 
         [DisplayName("Localidad")]
@@ -27,19 +25,15 @@ namespace VideoClub.WebMVC.Models.Socio
         [DisplayName("Provincia")]
         public int ProvinciaId { get; set; }
 
-        [DisplayName("Correo")]
-        public string CorreoElectronico { get; set; }
-
         [DisplayName("Tel. FIjo")]
         public string TelefonoFijo { get; set; }
 
         [DisplayName("Tel. Movil")]
         public string TelefonoMovil { get; set; }
 
-        [DisplayName("Fecha Nac")]
-        public string FechaDeNacimiento { get; set; }
-        public bool Activo { get; set; } = true;
-        public bool Sancionado { get; set; } = false;
+
+        [DisplayName("Correo")]
+        public string CorreoElectronico { get; set; }
 
         public Entidades.Entidades.TipoDeDocumento TipoDeDocumento { get; set; }
         public Entidades.Entidades.Localidad Localidad { get; set; }

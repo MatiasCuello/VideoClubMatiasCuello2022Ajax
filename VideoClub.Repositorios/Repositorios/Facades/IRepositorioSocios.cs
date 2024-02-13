@@ -7,7 +7,7 @@ using VideoClub.Entidades.Entidades;
 
 namespace VideoClub.Repositorios.Repositorios.Facades
 {
-    public interface IReposiorioSocios
+    public interface IRepositorioSocios
     {
         void Guardar(Socio socio);
         List<Socio> GetLista();

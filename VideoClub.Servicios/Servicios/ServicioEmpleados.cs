@@ -6,31 +6,28 @@ using System.Threading.Tasks;
 using VideoClub.Entidades.Entidades;
 using VideoClub.Repositorios;
 using VideoClub.Repositorios.Repositorios;
-using VideoClub.Repositorios.Repositorios.Facades;
 using VideoClub.Servicios.Servicios.Facades;
 
 namespace VideoClub.Servicios.Servicios
 {
-    public class ServicioSocios:IServicioSocios
+    public class ServicioEmpleados : IServicioEmpleados
     {
-        private readonly RepositorioSocios repositorio;
+        private readonly RepositorioEmpleados repositorio;
         private readonly VideoClubDbContext context;
         private readonly UnitOfWork unitOfWork;
 
-        public ServicioSocios(RepositorioSocios repositorio, VideoClubDbContext context, UnitOfWork unitOfWork)
+        public ServicioEmpleados(RepositorioEmpleados repositorio, VideoClubDbContext context, UnitOfWork unitOfWork)
         {
             this.repositorio = repositorio;
             this.context = context;
             this.unitOfWork = unitOfWork;
         }
-
-        public void Guardar(Socio socio)
+        public void Borrar(Empleado empleadoId)
         {
             try
             {
-                repositorio.Guardar(socio);
+                repositorio.Borrar(empleadoId);
                 unitOfWork.Save();
-
             }
             catch (Exception e)
             {
@@ -38,8 +35,44 @@ namespace VideoClub.Servicios.Servicios
             }
         }
 
+        public bool EstaRelacionado(Empleado empleado)
+        {
+            try
+            {
+                return repositorio.EstaRelacionado(empleado);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
 
-        public List<Socio> GetLista()
+        public bool Existe(Empleado empleado)
+        {
+            try
+            {
+                return repositorio.Existe(empleado);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        public Empleado GetEmpleadoPorId(int id)
+        {
+            try
+            {
+                return repositorio.GetEmpleadoPorId(id);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
+        public List<Empleado> GetLista()
         {
             try
             {
@@ -51,49 +84,13 @@ namespace VideoClub.Servicios.Servicios
             }
         }
 
-        public void Borrar(Socio socioId)
+        public void Guardar(Empleado empleado)
         {
             try
             {
-                repositorio.Borrar(socioId);
+                repositorio.Guardar(empleado);
                 unitOfWork.Save();
-            }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message);
-            }
-        }
 
-        public Socio GetSocioPorId(int id)
-        {
-            try
-            {
-                return repositorio.GetSocioPorId(id);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
-        }
-
-        public bool Existe(Socio socio)
-        {
-            try
-            {
-                return repositorio.Existe(socio);
-            }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message);
-            }
-        }
-
-        public bool EstaRelacionado(Socio socio)
-        {
-            try
-            {
-                return repositorio.EstaRelacionado(socio);
             }
             catch (Exception e)
             {

@@ -28,6 +28,11 @@ namespace VideoClub.WebMVC.Controllers
         }
 
         // GET: Localidades
+        public JsonResult ListarLocalidades()
+        {
+            var lista = servicio.GetLista2();
+            return Json(new { data = lista }, JsonRequestBehavior.AllowGet);
+        }
         public ActionResult Index()
         {
             var localidadEditVm = mapper.Map<List<LocalidadListVm>>(servicio.GetLista2());

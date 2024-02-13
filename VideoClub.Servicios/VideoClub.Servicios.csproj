@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Servicios\Facades\IServicioCalificaciones.cs" />
+    <Compile Include="Servicios\Facades\IServicioEmpleados.cs" />
     <Compile Include="Servicios\Facades\IServicioEstados.cs" />
     <Compile Include="Servicios\Facades\IServicioGeneros.cs" />
     <Compile Include="Servicios\Facades\IServicioLocalidades.cs" />
@@ -51,6 +52,7 @@
     <Compile Include="Servicios\Facades\IServicioSocios.cs" />
     <Compile Include="Servicios\Facades\IServicioSoportes.cs" />
     <Compile Include="Servicios\Facades\IServicioTiposDeDocumentos.cs" />
+    <Compile Include="Servicios\ServicioEmpleados.cs" />
     <Compile Include="Servicios\ServicioLocalidades.cs" />
     <Compile Include="Servicios\ServicioPeliculas.cs" />
     <Compile Include="Servicios\ServicioProvincias.cs" />

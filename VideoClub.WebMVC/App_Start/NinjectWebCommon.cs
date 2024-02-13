@@ -91,8 +91,11 @@ namespace VideoClub.WebMVC.App_Start
             kernel.Bind<IRepositorioTiposDeDocumentos>().To<RepositorioTiposDeDocumentos>().InRequestScope();
             kernel.Bind<IServicioTiposDeDocumentos>().To<ServicioTiposDeDocumentos>().InRequestScope();
 
-            kernel.Bind<IReposiorioSocios>().To<RepositorioSocios>().InRequestScope();
+            kernel.Bind<IRepositorioSocios>().To<RepositorioSocios>().InRequestScope();
             kernel.Bind<IServicioSocios>().To<ServicioSocios>().InRequestScope();
+
+            kernel.Bind<IRepositorioEmpleados>().To<RepositorioEmpleados>().InRequestScope();
+            kernel.Bind<IServicioEmpleados>().To<ServicioEmpleados>().InRequestScope();
 
             kernel.Bind<IUnitOfWork>().To<UnitOfWork>().InRequestScope();
 

@@ -1,36 +1,32 @@
-﻿@model List<VideoClub.Entidades.Entidades.Socio>
-@{ ViewBag.Title = "index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
+﻿@model List<VideoClub.Entidades.Entidades.Empleado>
+@{ ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml"; }
 <ol class="breadcrumb mt-4 mb-4 ">
     <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
-    <li class="breadcrumb-item active">Socios</li>
+    <li class="breadcrumb-item active">Empleados</li>
 </ol>
 <div class="card">
     <h5 class="card-header bg-dark text-white">
-        <i class="fas fa-film"></i>
-        Listado de Socios
+        <i class="fas fa-people-carry"></i>
+        Listado de Empleados
 
     </h5>
     <div class="card-body">
-        <button type="button" class="btn btn-primary" onclick="abrirModal()"><i class="fas fa-plus"></i> Nuevo Socio</button>
+        <button type="button" class="btn btn-primary" onclick="abrirModal()"><i class="fas fa-plus"></i> Nuevo</button>
         <hr />
         <table id="tabla" class="table display cell-border" style="width: 100%">
             <thead>
                 <tr>
                     <th>Nombre</th>
                     <th>Apellido</th>
-                    <th>Tipo</th>
-                    <th>Nro Doc</th>
+                    <th>Tipo Doc.</th>
+                    <th>Nro. Doc.</th>
                     <th>Direccion</th>
                     <th>Localidad</th>
                     <th>Provincia</th>
                     <th>Tel. Fijo</th>
                     <th>Tel. Movil</th>
                     <th>Correo</th>
-                    <th>Fecha Nac</th>
-                    <th>Sancionado</th>
-                    <th>Activo</th>
                     <th></th>
                 </tr>
             </thead>
@@ -41,8 +37,6 @@
     </div>
 </div>
 <!-- Modal -->
-<!-- Button trigger modal -->
-<!-- Modal -->
 <div class="modal fade" id="FormModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -52,7 +46,7 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <input type="hidden" id="txtSocioId" value="0" />
+                    <input type="hidden" id="txtEmpleadoId" value="0" />
 
                     <div class="row mt-3">
                         <div class="col-12">
@@ -98,11 +92,6 @@
                         <input type="text" class="form-control" id="txtCorreoElectronico" placeholder="Ingrese Correo ">
                     </div>
 
-                    @*<div class="col-md-6">
-                        <label for="dataFechaNac" class="form-label">Fecha de Nacimiento</label>
-                        <input type="datetime" class="form-control" id="dataFechaNac" />
-                    </div>*@
-                    
                     <div class="col-md-6">
                         <label for="cboProvincia" class="form-label">Provincia</label>
                         <select id="cboProvincia" class="form-select" aria-label="Default select example">
@@ -115,22 +104,6 @@
                         </select>
                     </div>
 
-                    <div class="col-md-6">
-                        <label for="cboSancionado" class="form-label">Sancionado</label>
-
-                        <select id="cboSancionado" class="form-select" aria-label="Default select example">
-                            <option value="0">NO</option>
-                            <option value="1">SI</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="cboActivo" class="form-label">Activo</label>
-
-                        <select id="cboActivo" class="form-select" aria-label="Default select example">
-                            <option value="0">NO</option>
-                            <option value="1">SI</option>
-                        </select>
-                    </div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -143,86 +116,24 @@
 @section scripts
 {
     <script>
-        var tablaSocios;
-        var filaSeleccionada;
-        var localidadDelSocio = 0;
+        var tablaEmpleados;
+        //var filaSeleccionada;
+        //var localidadDelEmpleado = 0;
 
         $(document).ready(function() {
             CargarTabla();
-            cargarCboTipoDocumento();
-            cargarCboProvincias();
-            cargarCboLocalidad();
-
-
-            $("#tabla tbody").on("click",
-                '.btn-editar',
-                function() {
-
-                    filaSeleccionada = $(this).closest("tr");
-                    var datos = tablaSocios.row(filaSeleccionada).data();
-                    abrirModal(datos);
-
-                });
-
-
-            $("#tabla tbody").on("click",
-                ".btn-borrar",
-                function() {
-                    var socioSeleccionado = $(this).closest("tr");
-                    var datosSocios = tablaSocios.row(socioSeleccionado).data();
-
-
-                    swal({
-                            title: "¿Está seguro?",
-                            text: "¿Desea eliminar el registro seleccionado?",
-                            type: "warning",
-                            showCancelButton: true,
-                            confirmButtonClass: "btn-danger",
-                            confirmButtonText: "SI",
-                            cancelButtonText: "NO",
-                            closeOnConfirm: false
-                        },
-                        function() {
-
-                            jQuery.ajax({
-                                url: "@Url.Action("EliminarSocio", "Socio")",
-                                type: "POST",
-                                data: JSON.stringify({ id: datosSocios.SocioId }),
-                                dataType: "json",
-                                contentType: "application/json; charset=utf-8",
-                                success: function(data) {
-
-                                    if (data.resultado) {
-                                        tablaSocios.row(socioSeleccionado).remove().draw();
-                                        swal("Borrado!", "Registro eliminado!!!", "success");
-                                    } else {
-                                        swal("No se pudo eliminar!", data.mensaje, "error");
-                                    }
-
-
-                                },
-                                error: function(error) {
-                                    console.log(error);
-                                },
-                                beforeSend: function() {
-
-                                }
-                            });
-
-
-                        });
-                });
-
+            //cargarCboTipoDocumento();
+            //cargarCboProvincias();
+            //cargarCboLocalidad();
         });
 
 
         function CargarTabla() {
-            cargarCboProvincias();
-            tablaSocios = $("#tabla").DataTable({
+            tablaEmpleados = $("#tabla").DataTable({
                 responsive: "true",
                 ordering: "false",
                 "ajax": {
-                    url: "@Url.Action("ListarSocios", "Socio")",
+                    url: "@Url.Action("ListarEmpleados", "Empleado")",
                     type: "GET",
                     dataType: "json"
                 },
@@ -255,28 +166,6 @@
                     { "data": "TelefonoFijo" },
                     { "data": "TelefonoMovil" },
                     { "data": "CorreoElectronico" },
-                    { "data": "FechaDeNacimiento" },
-                    {
-                        "data": "Sancionado",
-                        render: function(ValorDeSancionado) {
-                            if (ValorDeSancionado) {
-                                return '<span class="badge text-bg-success">SI</span>';
-                            } else {
-                                return '<span class="badge text-bg-danger">NO</span>';
-                            }
-                        }
-                    },
-                    {
-                        "data": "Activo",
-                        render: function(valorDeActiva) {
-                            if (valorDeActiva) {
-                                return '<span class="badge text-bg-success">SI</span>';
-                            } else {
-                                return '<span class="badge text-bg-danger">NO</span>';
-
-                            }
-                        }
-                    },
                     {
                         "defaultContent":
                             '<button type="button" class="btn btn-warning mx-1 btn-editar"  ><i class="fas fa-pen"></i></button>' +
@@ -285,21 +174,13 @@
                         "searchable": false,
                     }
                 ]
-
-            });
-            $('#cboProvincia').change(function() {
-                var provinciaId = $('#cboProvincia').val();
-                if (provinciaId > 0) {
-                    cargarCboLocalidad();
-
-                }
             });
         }
 
-        function abrirModal($SocioId) {
+        @*function abrirModal($EmpleadoId) {
             $('#mensajeError').hide();
-            if ($SocioId == 0) {
-                $("#txtSocioId").val(0);
+            if ($EmpleadoId == 0) {
+                $("#txtEmpleadoId").val(0);
                 $("#txtNombre").val("");
                 $("#txtApellido").val("");
                 $("#txtNumeroDeDocumento").val("");
@@ -307,35 +188,29 @@
                 $("#txtTelefonoFijo").val("");
                 $("#txtTelefonoMovil").val("");
                 $("#txtCorreoElectronico").val("");
-                $("#dataFechaNac").val("");
-                $("#cboSancionado").val(0);
-                $("#cboActivo").val(1);
                 $("#cboTipoDocumento option:first").val();
                 $("#cboProvincia option:first").val();
                 $("#cboLocalidad option:first").val();;
             } else {
                 $.ajax({
-                    "url": "@Url.Action("ListarSocios", "Socio")" + "?socioId=" + $SocioId,
+                    "url": "@Url.Action("ListarEmpleados", "Empleado")" + "?empleadoId=" + $EmpleadoId,
                     "type": "GET",
                     "dataType": "json",
                     "contentType": "application/json, charset=utf-8",
-                    success: function(socio) {
-                        localidadDelSocio = socio.SocioId;
-                        $("#txtSocioId").val(socio.SocioId);
-                        $("#txtNombre").val(socio.Nombre);
-                        $("#txtApellido").val(socio.Apellido);
-                        $("#txtNumeroDeDocumento").val(socio.NroDocumento);
-                        $("#txtDireccion").val(socio.Direccion);
-                        $("#txtTelefonoFijo").val(socio.TelefonoFijo);
-                        $("#txtTelefonoMovil").val(socio.TelefonoMovil);
-                        $("#txtCorreoElectronico").val(socio.CorreoElectronico);
-                        $("#dataFechaNac").val(socio.FechaDeNacimiento);
-                        $("#cboSancionado").val(socio.Sancionado == true ? 1 : 0);
-                        $("#cboActivo").val(socio.Activo == true ? 1 : 0);
+                    success: function(empleado) {
+                        localidadDelEmpleado = empleado.EmpleadoId;
+                        $("#txtEmpleadoId").val(empleado.EmpleadoId);
+                        $("#txtNombre").val(empleado.Nombre);
+                        $("#txtApellido").val(empleado.Apellido);
+                        $("#txtNumeroDeDocumento").val(empleado.NroDocumento);
+                        $("#txtDireccion").val(empleado.Direccion);
+                        $("#txtTelefonoFijo").val(empleado.TelefonoFijo);
+                        $("#txtTelefonoMovil").val(empleado.TelefonoMovil);
+                        $("#txtCorreoElectronico").val(empleado.CorreoElectronico);
 
-                        $("#cboProvincia").val(socio.ProvinciaId);
-                        $("#cboLocalidad").val(socio.LocalidadId);
-                        $("#cboTipoDocumento").val(socio.TipoDeDocumentoId);
+                        $("#cboProvincia").val(empleado.ProvinciaId);
+                        $("#cboLocalidad").val(empleado.LocalidadId);
+                        $("#cboTipoDocumento").val(empleado.TipoDeDocumentoId);
 
                     },
                     error: function(err) {
@@ -344,30 +219,32 @@
                 });
             }
             $("#FormModal").modal("show");
-        }
 
-        function cargarCboProvincias() {
-            $('#cboProvincia').empty();
-            $('#cboLocalidad').empty();
-            $.ajax({
-                "url": "@Url.Action("ListarProvincias", "Provincias")",
-                "type": "GET",
-                "dataType": "json",
-                "contentType": "application/json; charset=utf-8",
-                success: function(provincias) {
-                    console.log(provincias);
-                    $('#cboProvincia').append('<option selected disabled value = "" > ' + 'Seleccionar' + '</option>');
-                    $.each(provincias.data,
-                        function(index, provincia) {
-                            $("#cboProvincia").append('<option value="' + provincia.ProvinciaId + '">' + provincia.NombreProvincia + '</option>');
-                        });
+        }*@
 
-                }
-            });
+        ////@*function cargarCboProvincias() {
+        ////    $('#cboProvincia').empty();
+        ////    $('#cboLocalidad').empty();
+        ////    $.ajax({
+        //////        "url": "@Url.Action("ListarProvincias", "Provincias")",
+        ////        "type": "GET",
+        ////        "dataType": "json",
+        ////        "contentType": "application/json; charset=utf-8",
+        ////        success: function(provincias) {
+        ////            console.log(provincias);
+        ////            $('#cboProvincia').append('<option selected disabled value = "" > ' + 'Seleccionar' + '</option>');
+        ////            $.each(provincias.data,
+        ////                function(index, provincia) {
+        ////                    $("#cboProvincia").append
+        ////                        ('<option value="' + provincia.ProvinciaId + '">' + provincia.NombreProvincia + '</option>');
+        ////                });
 
-        }
+        ////        }
+        ////    });
 
-        function cargarCboLocalidad() {
+        ////}*@
+
+        @*function cargarCboLocalidad() {
             var provinciaId = $('#cboProvincia').val()
             $('#cboLocalidad').empty();
             $.ajax({
@@ -390,9 +267,9 @@
                 }
             });
 
-        }
+        }*@
 
-        function cargarCboTipoDocumento() {
+        @*function cargarCboTipoDocumento() {
 
             jQuery.ajax({
                 url: "@Url.Action("ListarTiposDeDocumentos", "TipoDeDocumento")",
@@ -415,7 +292,7 @@
 
                 }
             });
-        }
+        }*@
 
     </script>
 }

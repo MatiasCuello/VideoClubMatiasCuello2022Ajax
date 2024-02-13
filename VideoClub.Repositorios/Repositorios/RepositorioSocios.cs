@@ -9,13 +9,13 @@ using VideoClub.Repositorios.Repositorios.Facades;
 
 namespace VideoClub.Repositorios.Repositorios
 {
-    public class RepositorioSocios : IReposiorioSocios
+    public class RepositorioSocios : IRepositorioSocios
     {
         private readonly VideoClubDbContext context;
 
-        public RepositorioSocios()
+        public RepositorioSocios(VideoClubDbContext context)
         {
-            context = new VideoClubDbContext();
+            this.context = context;
         }
         public void Borrar(Socio socioId)
         {
@@ -24,7 +24,7 @@ namespace VideoClub.Repositorios.Repositorios
                 var socioInDb = context.Socios.SingleOrDefault(s => s.SocioId == socioId.SocioId);
 
                 context.Entry(socioInDb).State = EntityState.Deleted;
-                context.SaveChanges();
+                
             }
             catch (Exception e)
             {
@@ -52,7 +52,7 @@ namespace VideoClub.Repositorios.Repositorios
                 if (socio.SocioId == 0)
                 {
                     return context.Socios
-                        .Any(s => s.SocioId == socio.SocioId);
+                        .Any(s => s.Nombre == socio.Nombre && s.Apellido != socio.Apellido);
                 }
                 return context.Socios.Any(s => s.Nombre == socio.Nombre &&
                                                s.SocioId != socio.SocioId &&
@@ -86,6 +86,9 @@ namespace VideoClub.Repositorios.Repositorios
             try
             {
                 return context.Socios
+                    .Include(s => s.TipoDeDocumento)
+                    .Include(s => s.Localidad)
+                    .Include(s => s.Provincia)
                     .SingleOrDefault(s => s.SocioId == id);
             }
             catch (Exception e)
@@ -118,30 +121,31 @@ namespace VideoClub.Repositorios.Repositorios
                 }
                 else
                 {
-                    var sociosInDb = context.Socios.SingleOrDefault(s => s.SocioId == socio.SocioId);
-                    if (sociosInDb == null)
+                    var socioInDb = context.Socios.SingleOrDefault(s => s.SocioId == socio.SocioId);
+                    if (socioInDb == null)
                     {
                         throw new Exception("Código de Socio inexistente");
                     }
 
-                    sociosInDb.Nombre = socio.Nombre;
-                    sociosInDb.Apellido = socio.Apellido;
-                    sociosInDb.TipoDeDocumentoId = socio.TipoDeDocumentoId;
-                    sociosInDb.NroDocumento = socio.NroDocumento;
-                    sociosInDb.Direccion = socio.Direccion;
-                    sociosInDb.LocalidadId = socio.LocalidadId;
-                    sociosInDb.ProvinciaId = socio.ProvinciaId;
-                    sociosInDb.TelefonoFijo = socio.TelefonoFijo;
-                    sociosInDb.TelefonoMovil = socio.TelefonoMovil;
-                    sociosInDb.CorreoElectronico = socio.CorreoElectronico;
-                    sociosInDb.FechaDeNacimiento = socio.FechaDeNacimiento;
-                    sociosInDb.Sancionado = socio.Sancionado;
-                    sociosInDb.Activo = socio.Activo;
+                    socioInDb.SocioId = socio.SocioId;
+                    socioInDb.Nombre = socio.Nombre;
+                    socioInDb.Apellido = socio.Apellido;
+                    socioInDb.TipoDeDocumentoId = socio.TipoDeDocumentoId;
+                    socioInDb.NroDocumento = socio.NroDocumento;
+                    socioInDb.Direccion = socio.Direccion;
+                    socioInDb.LocalidadId = socio.LocalidadId;
+                    socioInDb.ProvinciaId = socio.ProvinciaId;
+                    socioInDb.TelefonoFijo = socio.TelefonoFijo;
+                    socioInDb.TelefonoMovil = socio.TelefonoMovil;
+                    socioInDb.CorreoElectronico = socio.CorreoElectronico;
+                    socioInDb.FechaDeNacimiento = socio.FechaDeNacimiento;
+                    socioInDb.Sancionado = socio.Sancionado;
+                    socioInDb.Activo = socio.Activo;
 
-                    context.Entry(sociosInDb).State = EntityState.Modified;
+                    context.Entry(socioInDb).State = EntityState.Modified;
 
                 }
-                context.SaveChanges();
+                
 
             }
             catch (Exception e)
