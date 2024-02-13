@@ -144,6 +144,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LocalidadController.cs" />
     <Compile Include="Controllers\PeliculaController.cs" />
+    <Compile Include="Controllers\ProveedorController.cs" />
     <Compile Include="Controllers\ProvinciasController.cs" />
     <Compile Include="Controllers\SocioController.cs" />
     <Compile Include="Controllers\SoporteController.cs" />
@@ -160,7 +161,8 @@
     <Compile Include="Models\Localidad\LocalidadListVm.cs" />
     <Compile Include="Models\Pelicula\PeliculaEditVm.cs" />
     <Compile Include="Models\Pelicula\PeliculaListVm.cs" />
-    <Compile Include="Models\Provincias\ProvinciaEditVm.cs" />
+    <Compile Include="Models\Proveedor\ProveedorListVm.cs" />
+    <Compile Include="Models\Provincia\ProvinciaEditVm.cs" />
     <Compile Include="Models\Socio\SocioEditVm.cs" />
     <Compile Include="Models\Socio\SocioListVm.cs" />
     <Compile Include="Models\Soporte\SoporteEditVm.cs" />
@@ -531,6 +533,7 @@
     <Content Include="Views\TipoDeDocumento\Index.cshtml" />
     <Content Include="Views\Socio\Index.cshtml" />
     <Content Include="Views\Empleado\Index.cshtml" />
+    <Content Include="Views\Proveedor\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

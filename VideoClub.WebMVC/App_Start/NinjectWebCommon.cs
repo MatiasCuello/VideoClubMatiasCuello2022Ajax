@@ -97,6 +97,9 @@ namespace VideoClub.WebMVC.App_Start
             kernel.Bind<IRepositorioEmpleados>().To<RepositorioEmpleados>().InRequestScope();
             kernel.Bind<IServicioEmpleados>().To<ServicioEmpleados>().InRequestScope();
 
+            kernel.Bind<IRepositorioProveedores>().To<RepositorioProveedores>().InRequestScope();
+            kernel.Bind<IServicioProveedores>().To<ServicioProveedores>().InRequestScope();
+
             kernel.Bind<IUnitOfWork>().To<UnitOfWork>().InRequestScope();
 
             kernel.Bind<VideoClubDbContext>().ToSelf().InThreadScope();

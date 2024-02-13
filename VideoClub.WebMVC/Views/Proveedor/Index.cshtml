@@ -1,0 +1,286 @@
+﻿@model List<VideoClub.Entidades.Entidades.Proveedor>
+@{ ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml"; }
+<ol class="breadcrumb mt-4 mb-4 ">
+    <li class="breadcrumb-item"><a href="../Empleado/index.html">Dashboard</a></li>
+    <li class="breadcrumb-item active">Proveedores</li>
+</ol>
+<div class="card">
+    <h5 class="card-header bg-dark text-white">
+        <i class="fas fa-people-carry"></i>
+        Listado de Proveedores
+
+    </h5>
+    <div class="card-body">
+        <button type="button" class="btn btn-primary" onclick="abrirModal()"><i class="fas fa-plus"></i> Nuevo</button>
+        <hr />
+        <table id="tabla" class="table display cell-border" style="width: 100%">
+            <thead>
+                <tr>
+                    <th>CUIT</th>
+                    <th>Razon Social</th>
+                    <th>Pers. Contacto</th>
+                    <th>Direccion</th>
+                    <th>Localidad</th>
+                    <th>Provincia</th>
+                    <th>Tel. Fijo</th>
+                    <th>Tel. Movil</th>
+                    <th>Correo</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="FormModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Agregar</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <input type="hidden" id="txtProveedorId" value="0" />
+
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <div id="mensajeError" class="alert alert-danger" role="alert">
+                                A simple danger alert—check it out!
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-6">
+                        <label for="txtCUIT" class="form-label">CUIT</label>
+                        <input type="text" class="form-control" id="txtCUIT" placeholder="Ingrese CUIT">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="txtRazonSocial" class="form-label">Razon Social</label>
+                        <input type="text" class="form-control" id="txtRazonSocial" placeholder="Ingrese Razon Social">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="txtPersonaContacto" class="form-label">Persona de Contacto</label>
+                        <input type="text" class="form-control" id="txtPersonaContacto" placeholder="Ingrese Nro Documento">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="txtDireccion" class="form-label">Direccion</label>
+                        <input type="text" class="form-control" id="txtDireccion" placeholder="Ingrese Direccion">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="txtTelefonoFijo" class="form-label">Telefono Fijo</label>
+                        <input type="text" class="form-control" id="txtTelefonoFijo" placeholder="Ingrese Telefono Fijo">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="txtTelefonoMovil" class="form-label">Telefono Movil</label>
+                        <input type="text" class="form-control" id="txtTelefonoMovil" placeholder="Ingrese Telefono Movil">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="txtCorreoElectronico" class="form-label">Correo Electronico</label>
+                        <input type="text" class="form-control" id="txtCorreoElectronico" placeholder="Ingrese Correo ">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="cboProvincia" class="form-label">Provincia</label>
+                        <select id="cboProvincia" class="form-select" aria-label="Default select example">
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="cboLocalidad" class="form-label">Localidad</label>
+                        <select id="cboLocalidad" class="form-select" aria-label="Default select example">
+                        </select>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" onclick="Guardar()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts
+{
+    <script>
+        var tablaProveedores;
+        //var filaSeleccionada;
+        //var localidadDelEmpleado = 0;
+
+        $(document).ready(function() {
+            CargarTabla();
+            //cargarCboTipoDocumento();
+            //cargarCboProvincias();
+            //cargarCboLocalidad();
+        });
+
+
+        function CargarTabla() {
+             tablaProveedores= $("#tabla").DataTable({
+                responsive: "true",
+                ordering: "false",
+                "ajax": {
+                    url: "@Url.Action("ListarProveedores", "Proveedor")",
+                    type: "GET",
+                    dataType: "json"
+                },
+                "columns": [
+                    { "data": "CUIT" },
+                    { "data": "RazonSocial" },
+                    { "data": "PersonaDeContacto"},
+                    { "data": "Direccion" },
+                    {
+                        "data": "Localidad",
+                        render: function(data) {
+                            return data.NombreLocalidad
+                        }
+
+                    },
+                    {
+                        "data": "Provincia",
+                        render: function(data) {
+                            return data.NombreProvincia
+                        }
+
+                    },
+                    { "data": "TelefonoFijo" },
+                    { "data": "TelefonoMovil" },
+                    { "data": "CorreoElectronico" },
+                    {
+                        "defaultContent":
+                            '<button type="button" class="btn btn-warning mx-1 btn-editar"  ><i class="fas fa-pen"></i></button>' +
+                                '<button type="button" class="btn btn-danger mx-1 btn-borrar" ><i class="fas fa-trash"></i></button>',
+                        "orderable": false,
+                        "searchable": false,
+                    }
+                ]
+            });
+        }
+
+        @*function abrirModal($EmpleadoId) {
+            $('#mensajeError').hide();
+            if ($EmpleadoId == 0) {
+                $("#txtEmpleadoId").val(0);
+                $("#txtNombre").val("");
+                $("#txtApellido").val("");
+                $("#txtNumeroDeDocumento").val("");
+                $("#txtDireccion").val("");
+                $("#txtTelefonoFijo").val("");
+                $("#txtTelefonoMovil").val("");
+                $("#txtCorreoElectronico").val("");
+                $("#cboTipoDocumento option:first").val();
+                $("#cboProvincia option:first").val();
+                $("#cboLocalidad option:first").val();;
+            } else {
+                $.ajax({
+                    "url": "@Url.Action("ListarEmpleados", "Empleado")" + "?empleadoId=" + $EmpleadoId,
+                    "type": "GET",
+                    "dataType": "json",
+                    "contentType": "application/json, charset=utf-8",
+                    success: function(empleado) {
+                        localidadDelEmpleado = empleado.EmpleadoId;
+                        $("#txtEmpleadoId").val(empleado.EmpleadoId);
+                        $("#txtNombre").val(empleado.Nombre);
+                        $("#txtApellido").val(empleado.Apellido);
+                        $("#txtNumeroDeDocumento").val(empleado.NroDocumento);
+                        $("#txtDireccion").val(empleado.Direccion);
+                        $("#txtTelefonoFijo").val(empleado.TelefonoFijo);
+                        $("#txtTelefonoMovil").val(empleado.TelefonoMovil);
+                        $("#txtCorreoElectronico").val(empleado.CorreoElectronico);
+
+                        $("#cboProvincia").val(empleado.ProvinciaId);
+                        $("#cboLocalidad").val(empleado.LocalidadId);
+                        $("#cboTipoDocumento").val(empleado.TipoDeDocumentoId);
+
+                    },
+                    error: function(err) {
+                        console.log(err);
+                    }
+                });
+            }
+            $("#FormModal").modal("show");
+
+        }*@
+
+        ////@*function cargarCboProvincias() {
+        ////    $('#cboProvincia').empty();
+        ////    $('#cboLocalidad').empty();
+        ////    $.ajax({
+        //////        "url": "@Url.Action("ListarProvincias", "Provincias")",
+        ////        "type": "GET",
+        ////        "dataType": "json",
+        ////        "contentType": "application/json; charset=utf-8",
+        ////        success: function(provincias) {
+        ////            console.log(provincias);
+        ////            $('#cboProvincia').append('<option selected disabled value = "" > ' + 'Seleccionar' + '</option>');
+        ////            $.each(provincias.data,
+        ////                function(index, provincia) {
+        ////                    $("#cboProvincia").append
+        ////                        ('<option value="' + provincia.ProvinciaId + '">' + provincia.NombreProvincia + '</option>');
+        ////                });
+
+        ////        }
+        ////    });
+
+        ////}*@
+
+        @*function cargarCboLocalidad() {
+            var provinciaId = $('#cboProvincia').val()
+            $('#cboLocalidad').empty();
+            $.ajax({
+                "url": "@Url.Action("ListarLocalidades", "Localidad")" + "?provinciaId=" + provinciaId,
+                "type": "GET",
+                "dataType": "json",
+                "contentType": "application/json; charset=utf-8",
+                success: function(localidades) {
+                    console.log(localidades);
+                    $('#cboLocalidad').append('<option selected disabled value = "" > ' + 'Seleccionar' + '</option>');
+                    $.each(localidades.data,
+                        function(index, localidad) {
+                            $("#cboLocalidad").append('<option value="' + localidad.LocalidadId + '">' + localidad.NombreLocalidad + '</option>');
+                        });
+                    if (localidadDelSocio != 0) {
+                        $('#cboLocalidad option[value=' + localidadDelSocio + ']').attr("selected", true);
+
+                    }
+
+                }
+            });
+
+        }*@
+
+        @*function cargarCboTipoDocumento() {
+
+            jQuery.ajax({
+                url: "@Url.Action("ListarTiposDeDocumentos", "TipoDeDocumento")",
+                type: "GET",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function(tipoDeDocumentos) {
+                    console.log(tipoDeDocumentos);
+
+                    $('#cboTipoDocumento')
+                        .append('<option selected disabled value = "" > ' + 'Seleccionar' + '</option>');
+                    $.each(tipoDeDocumentos.data,
+                        function(index, tipoDeDocumento) {
+                            $("#cboTipoDocumento").append('<option value="' +
+                                tipoDeDocumento.TipoDeDocumentoId +
+                                '">' +
+                                tipoDeDocumento.Descripcion +
+                                '</option>');
+                        });
+
+                }
+            });
+        }*@
+
+    </script>
+}
+

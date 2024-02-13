@@ -8,11 +8,11 @@ using VideoClub.Entidades.Entidades;
 
 namespace VideoClub.Repositorios.EntityTypeConfigurations
 {
-    public class ProvinciasEntityTypeConfiguration:EntityTypeConfiguration<Provincia>
+    public class SocioEntityTypeConfiguration:EntityTypeConfiguration<Socio>
     {
-        public ProvinciasEntityTypeConfiguration()
+        public SocioEntityTypeConfiguration()
         {
-            ToTable("Provincias");
+            ToTable("Socios");
         }
     }
 }

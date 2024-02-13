@@ -8,10 +8,10 @@ using VideoClub.Entidades.Entidades;
 
 namespace VideoClub.Repositorios.EntityTypeConfigurations
 {
-    public class EstadosEntityTypeConfigurations : EntityTypeConfiguration<Estado>
+    public class EstadoEntityTypeConfiguration : EntityTypeConfiguration<Estado>
     {
 
-        public EstadosEntityTypeConfigurations()
+        public EstadoEntityTypeConfiguration()
         {
             ToTable("Estados");
         }

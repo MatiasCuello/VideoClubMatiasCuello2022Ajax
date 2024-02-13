@@ -6,13 +6,13 @@ using System.Text;
 using System.Threading.Tasks;
 using VideoClub.Entidades.Entidades;
 
-namespace VideoClub.Repositorios.Repositorios
+namespace VideoClub.Repositorios.EntityTypeConfigurations
 {
-    public class CalificacionesEntityTypeConfiguration:EntityTypeConfiguration<Calificacion>
+    public class LocalidadEntityTypeConfiguration:EntityTypeConfiguration<Localidad>
     {
-        public CalificacionesEntityTypeConfiguration()
+        public LocalidadEntityTypeConfiguration()
         {
-            ToTable("Calificaciones");
+            ToTable("Localidades");
         }
     }
 }

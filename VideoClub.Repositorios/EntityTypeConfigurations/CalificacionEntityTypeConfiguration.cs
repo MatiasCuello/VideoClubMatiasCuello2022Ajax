@@ -6,13 +6,13 @@ using System.Text;
 using System.Threading.Tasks;
 using VideoClub.Entidades.Entidades;
 
-namespace VideoClub.Repositorios.EntityTypeConfigurations
+namespace VideoClub.Repositorios.Repositorios
 {
-    public class PeliculasEntityTypeConfiguration:EntityTypeConfiguration<Pelicula>
+    public class CalificacionEntityTypeConfiguration:EntityTypeConfiguration<Calificacion>
     {
-        public PeliculasEntityTypeConfiguration()
+        public CalificacionEntityTypeConfiguration()
         {
-            ToTable("Peliculas");
+            ToTable("Calificaciones");
         }
     }
 }

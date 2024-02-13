@@ -9,9 +9,9 @@ using VideoClub.Entidades.Entidades;
 
 namespace VideoClub.Repositorios.EntityTypeConfigurations
 {
-    public class EmpleadosEntityTypeConfigurations:EntityTypeConfiguration<Empleado>
+    public class EmpleadoEntityTypeConfiguration:EntityTypeConfiguration<Empleado>
     {
-        public EmpleadosEntityTypeConfigurations()
+        public EmpleadoEntityTypeConfiguration()
         {
             ToTable("Empleados");
         }

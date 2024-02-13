@@ -51,18 +51,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EntityTypeConfigurations\EmpleadosEntityTypeConfigurations.cs" />
-    <Compile Include="EntityTypeConfigurations\EstadosEntityTypeConfigurations.cs" />
-    <Compile Include="EntityTypeConfigurations\GenerosEntityTypeConfigurations.cs" />
-    <Compile Include="EntityTypeConfigurations\LocalidadesEntityTypeConfiguration.cs" />
-    <Compile Include="EntityTypeConfigurations\PeliculasEntityTypeConfiguration.cs" />
-    <Compile Include="EntityTypeConfigurations\ProvinciasEntityTypeConfiguration.cs" />
-    <Compile Include="EntityTypeConfigurations\SociosEntityTypeConfigurations.cs" />
-    <Compile Include="EntityTypeConfigurations\SoportesEntityTypeConfiguration.cs" />
-    <Compile Include="EntityTypeConfigurations\TiposDeDocumentosEntityTypeConfiguration.cs" />
+    <Compile Include="EntityTypeConfigurations\EmpleadoEntityTypeConfiguration.cs" />
+    <Compile Include="EntityTypeConfigurations\EstadoEntityTypeConfiguration.cs" />
+    <Compile Include="EntityTypeConfigurations\GeneroEntityTypeConfiguration.cs" />
+    <Compile Include="EntityTypeConfigurations\LocalidadEntityTypeConfiguration.cs" />
+    <Compile Include="EntityTypeConfigurations\PeliculaEntityTypeConfiguration.cs" />
+    <Compile Include="EntityTypeConfigurations\ProveedorEntityTypeConfiguration.cs" />
+    <Compile Include="EntityTypeConfigurations\ProvinciaEntityTypeConfiguration.cs" />
+    <Compile Include="EntityTypeConfigurations\SocioEntityTypeConfiguration.cs" />
+    <Compile Include="EntityTypeConfigurations\SoporteEntityTypeConfiguration.cs" />
+    <Compile Include="EntityTypeConfigurations\TipoDeDocumentoEntityTypeConfiguration.cs" />
     <Compile Include="IUnitOfWork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="EntityTypeConfigurations\CalificacionesEntityTypeConfiguration.cs" />
+    <Compile Include="EntityTypeConfigurations\CalificacionEntityTypeConfiguration.cs" />
+    <Compile Include="Repositorios\Facades\IRepositorioProveedores.cs" />
     <Compile Include="Repositorios\Facades\IRepositorioSocios.cs" />
     <Compile Include="Repositorios\Facades\IRepositorioCalificaciones.cs" />
     <Compile Include="Repositorios\Facades\IRepositorioEmpleados.cs" />
@@ -79,6 +81,7 @@
     <Compile Include="Repositorios\RepositorioCalificaciones.cs" />
     <Compile Include="Repositorios\RepositorioEstados.cs" />
     <Compile Include="Repositorios\RepositorioGeneros.cs" />
+    <Compile Include="Repositorios\RepositorioProveedores.cs" />
     <Compile Include="Repositorios\RepositorioProvincias.cs" />
     <Compile Include="Repositorios\RepositorioSocios.cs" />
     <Compile Include="Repositorios\RepositorioSoportes.cs" />

@@ -10,6 +10,7 @@ using VideoClub.WebMVC.Models.Estado;
 using VideoClub.WebMVC.Models.Genero;
 using VideoClub.WebMVC.Models.Localidad;
 using VideoClub.WebMVC.Models.Pelicula;
+using VideoClub.WebMVC.Models.Proveedor;
 using VideoClub.WebMVC.Models.Provincias;
 using VideoClub.WebMVC.Models.Socio;
 using VideoClub.WebMVC.Models.Soporte;
@@ -29,8 +30,17 @@ namespace VideoClub.WebMVC.Mapping
             LoadLocalidadesMapping();
             LoadSocioMapping();
             LoadEmpleadoMapping();
+            LoadProveedorMapping();
         }
-
+        private void LoadProveedorMapping()
+        {
+            CreateMap<Proveedor, ProveedorListVm>()
+                .ForMember(dest => dest.Localidad,
+                    opt => opt.MapFrom(src => src.Localidad));
+            CreateMap<Proveedor, ProveedorListVm>()
+                .ForMember(dest => dest.Provincia,
+                    opt => opt.MapFrom(src => src.Provincia));
+        }
         private void LoadEmpleadoMapping()
         {
             CreateMap<Empleado, EmpleadoListVm>()

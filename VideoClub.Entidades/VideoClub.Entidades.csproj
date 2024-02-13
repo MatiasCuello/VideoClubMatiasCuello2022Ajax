@@ -49,6 +49,7 @@
     <Compile Include="Entidades\Genero.cs" />
     <Compile Include="Entidades\Localidad.cs" />
     <Compile Include="Entidades\Pelicula.cs" />
+    <Compile Include="Entidades\Proveedor.cs" />
     <Compile Include="Entidades\Provincia.cs" />
     <Compile Include="Entidades\Socio.cs" />
     <Compile Include="Entidades\Soporte.cs" />

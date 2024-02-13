@@ -8,11 +8,11 @@ using VideoClub.Entidades.Entidades;
 
 namespace VideoClub.Repositorios.EntityTypeConfigurations
 {
-    public class TiposDeDocumentosEntityTypeConfiguration:EntityTypeConfiguration<TipoDeDocumento>
+    public class PeliculaEntityTypeConfiguration:EntityTypeConfiguration<Pelicula>
     {
-        public TiposDeDocumentosEntityTypeConfiguration()
+        public PeliculaEntityTypeConfiguration()
         {
-            ToTable("TiposDeDocumentos");
+            ToTable("Peliculas");
         }
     }
 }
