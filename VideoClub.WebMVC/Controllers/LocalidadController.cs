@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using AutoMapper;
+using Newtonsoft.Json;
 using VideoClub.Entidades.Entidades;
 using VideoClub.Servicios.Servicios;
 using VideoClub.Servicios.Servicios.Facades;
@@ -28,184 +30,127 @@ namespace VideoClub.WebMVC.Controllers
         }
 
         // GET: Localidades
-        public JsonResult ListarLocalidades()
-        {
-            var lista = servicio.GetLista2();
-            return Json(new { data = lista }, JsonRequestBehavior.AllowGet);
-        }
+        //public JsonResult ListarLocalidades()
+        //{
+        //    var lista = servicio.GetLista2();
+        //    return Json(new {data = lista}, JsonRequestBehavior.AllowGet);
+        //}
+
         public ActionResult Index()
         {
-            var localidadEditVm = mapper.Map<List<LocalidadListVm>>(servicio.GetLista2());
-            localidadEditVm = localidadEditVm
-                .OrderBy(c => c.NombreLocalidad)
-                .ThenBy(c => c.Provincia)
-                .ToList();
-            return View(localidadEditVm);
+            //var localidadEditVm = mapper.Map<List<LocalidadListVm>>(servicio.GetLista2());
+            //localidadEditVm = localidadEditVm
+            //    .OrderBy(c => c.NombreLocalidad)
+            //    .ThenBy(c => c.Provincia)
+            //    .ToList();
+            //return View(localidadEditVm);
+            return View();
         }
-        public ActionResult Create()
+        public JsonResult ListarLocalidades()
         {
-            var listarProvincias = servicioProvincias.GetLista();
-            var provinciasDropDown = listarProvincias.Select(p => new SelectListItem()
+            var listaLocalidades = mapper.Map<List<LocalidadListVm>>(servicio.GetLista2());
+            return Json(new { data = listaLocalidades }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public JsonResult GetLocalidad(int localidadId)
+        {
+            var localidad = servicio.GetLocalidadPorId(localidadId);
+            var localidadEncontrada = new Localidad()
             {
-                Text = p.NombreProvincia,
-                Value = p.ProvinciaId.ToString()
-            }).ToList();
-            var localidadEditVm = new LocalidadEditVm()
-            {
-                Provincias = provinciasDropDown
-        };
-            return View(localidadEditVm);
+                LocalidadId = localidad.LocalidadId,
+                NombreLocalidad = localidad.NombreLocalidad,
+                ProvinciaId = localidad.ProvinciaId
+            };
+            return Json(localidadEncontrada, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(LocalidadEditVm localidadEditVm)
+        public JsonResult Create(string objeto)
         {
-            if (!ModelState.IsValid)
-            {
-                var listaProvincias = servicioProvincias.GetLista();
-                var proviciasDropDown = listaProvincias.Select(p => new SelectListItem()
-                {
-                    Text = p.NombreProvincia,
-                    Value = p.ProvinciaId.ToString()
-                }).ToList();
-                localidadEditVm.Provincias = proviciasDropDown;
+            bool respuesta = true;
+            string mensaje = string.Empty;
 
-                return View(localidadEditVm);
+            Localidad localidad = new Localidad();
+            localidad = JsonConvert.DeserializeObject<Localidad>(objeto);
+
+
+            mensaje = ValidarLocalidad(localidad);
+            if (mensaje != string.Empty)
+            {
+                respuesta = false;
+                return Json(new { respuesta = respuesta, mensaje = mensaje }, JsonRequestBehavior.AllowGet);
             }
-            var localidad = mapper.Map<Localidad>(localidadEditVm);
+
             try
             {
                 if (servicio.Existe(localidad))
                 {
-                    ModelState.AddModelError(string.Empty, "Localidad existente!!!");
-                    var listarProvincias = servicioProvincias.GetLista();
-
-                    var provinciasDropDown = listarProvincias.Select(p => new SelectListItem()
-                    {
-                        Text = p.NombreProvincia,
-                        Value = p.ProvinciaId.ToString()
-                    }).ToList();
-                    localidadEditVm.Provincias = provinciasDropDown;
-
-                    return View(localidadEditVm);
+                    respuesta = false;
+                    mensaje = "Localidad existente!";
+                    return Json(new { respuesta = respuesta, mensaje = mensaje }, JsonRequestBehavior.AllowGet);
                 }
                 servicio.Guardar(localidad);
-                return RedirectToAction("Index");
+                respuesta = true;
+                mensaje = "Registro guardado";
+                return Json(new { respuesta = respuesta, mensaje = mensaje }, JsonRequestBehavior.AllowGet);
+
             }
             catch (Exception e)
             {
-                return RedirectToAction("Index");
+                respuesta = false;
+                mensaje = "Error al intentar guardar el registro";
+                return Json(new { respuesta = respuesta, mensaje = mensaje }, JsonRequestBehavior.AllowGet);
+
             }
         }
-        public ActionResult Edit(int? id)
+
+        private string ValidarLocalidad(Localidad localidad)
         {
-            if (id == null)
+            StringBuilder mensaje = new StringBuilder();
+            if (string.IsNullOrEmpty(localidad.NombreLocalidad))
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                mensaje.AppendLine("El nombre de la localidad es requerido" + "<br>");
+            }
+            else if (localidad.NombreLocalidad.Length > 50)
+            {
+                mensaje.AppendLine("El nombre de la localidad tiene más de 50 caracteres" + "<br>");
             }
 
-            var localidad = servicio.GetLocalidadPorId(id.Value);
-            if (localidad == null)
+            if (localidad.ProvinciaId == 0)
             {
-                return HttpNotFound("Código de localidad erróneo!!!");
+                mensaje.AppendLine("Debe seleccionar una provincia");
             }
 
-            var localidadEditVm = mapper.Map<LocalidadEditVm>(localidad);
-            var listaProvincias = servicioProvincias.GetLista();
-
-            var provinciassDropDown = listaProvincias.Select(p => new SelectListItem()
-            {
-                Text = p.NombreProvincia,
-                Value = p.ProvinciaId.ToString()
-            }).ToList();
-            localidadEditVm.Provincias = provinciassDropDown;
-            return View(localidadEditVm);
-
+            return mensaje.ToString();
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(LocalidadEditVm localidadEditVm)
+        [HttpGet]
+        public JsonResult Eliminar(int localidadId)
         {
-            if (!ModelState.IsValid)
-            {
-                var listaProvincias = servicioProvincias.GetLista();
-
-                var provinciasDropDown = listaProvincias.Select(p => new SelectListItem()
-                {
-                    Text = p.NombreProvincia,
-                    Value = p.ProvinciaId.ToString()
-                }).ToList();
-                localidadEditVm.Provincias = provinciasDropDown;
-
-                return View(localidadEditVm);
-            }
-
-            var localidad = mapper.Map<Localidad>(localidadEditVm);
+            bool respuesta = true;
+            string mensaje = string.Empty;
             try
             {
-                if (servicio.Existe(localidad))
-                {
-                    ModelState.AddModelError(string.Empty, "Localidad existente!");
-                    var listaProvincias = servicioProvincias.GetLista();
-
-                    var provinciasDropDown = listaProvincias.Select(p => new SelectListItem()
-                    {
-                        Text = p.NombreProvincia,
-                        Value = p.ProvinciaId.ToString()
-                    }).ToList();
-                    localidadEditVm.Provincias = provinciasDropDown;
-
-                    return View(localidadEditVm);
-                }
-                servicio.Guardar(localidad);
-                return RedirectToAction("Index");
-            }
-            catch (Exception e)
-            {
-                ModelState.AddModelError(string.Empty, e.Message);
-                return RedirectToAction("Index");
-            }
-        }
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var localidad = servicio.GetLocalidadPorId(id.Value);
-            if (localidad == null)
-            {
-                return HttpNotFound("Código de localidad erróneo!!!");
-            }
-
-            var localidadEditVm = mapper.Map<LocalidadListVm>(localidad);
-            return View(localidadEditVm);
-        }
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirm(int id)
-        {
-            try
-            {
-                var localidad = servicio.GetLocalidadPorId(id);
+                var localidad = servicio.GetLocalidadPorId(localidadId);
                 if (servicio.EstaRelacionado(localidad))
                 {
-                    var localidadVm = mapper.Map<LocalidadListVm>(localidad);
-                    ModelState.AddModelError(string.Empty, "Localidad con registros relacionados... Eliminacion denegada");
-                    return View(localidadVm);
+                    respuesta = false;
+                    mensaje = "Registro relacionado... baja denegada!!!";
+                    return Json(new { respuesta = respuesta, mensaje = mensaje }, JsonRequestBehavior.AllowGet);
                 }
-                servicio.Borrar(localidad);
-                return RedirectToAction("Index");
+                servicio.Borrar(localidadId);
+                respuesta = true;
+                mensaje = "Registro borrado !";
+                return Json(new { respuesta = respuesta, mensaje = mensaje }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
             {
-                ModelState.AddModelError(string.Empty, e.Message);
-                return RedirectToAction("Index");
+                respuesta = false;
+                mensaje = "Error al intentar dar de baja una ciudad";
+                return Json(new { respuesta = respuesta, mensaje = mensaje }, JsonRequestBehavior.AllowGet);
             }
-        }
 
+        }
     }
 }

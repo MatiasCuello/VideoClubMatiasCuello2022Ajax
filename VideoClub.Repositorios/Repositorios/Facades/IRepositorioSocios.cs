@@ -11,7 +11,7 @@ namespace VideoClub.Repositorios.Repositorios.Facades
     {
         void Guardar(Socio socio);
         List<Socio> GetLista();
-        void Borrar(Socio socioId);
+        void Borrar(int id);
         Socio GetSocioPorId(int id);
         bool Existe(Socio socio);
         bool EstaRelacionado(Socio socio);

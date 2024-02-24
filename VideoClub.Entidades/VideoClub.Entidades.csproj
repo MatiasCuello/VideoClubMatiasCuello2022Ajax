@@ -54,6 +54,7 @@
     <Compile Include="Entidades\Socio.cs" />
     <Compile Include="Entidades\Soporte.cs" />
     <Compile Include="Entidades\TipoDeDocumento.cs" />
+    <Compile Include="Enums\Orden.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

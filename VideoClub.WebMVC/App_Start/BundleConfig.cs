@@ -31,7 +31,10 @@ namespace VideoClub.WebMVC
 
             bundles.Add(new Bundle("~/bundles/bootstrap").Include(
                 "~/Scripts/bootstrap.bundle.js",
-                      "~/Scripts/bootstrap.js"));
+                "~/Scripts/sweetalert2.all.min.js",
+                "~/Scripts/loadingoverlay.min.js",
+                "~/Scripts/toastr.js",
+                "~/Scripts/bootstrap.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                 "~/Content/DataTables/css/jquery.dataTables.css",
@@ -39,6 +42,7 @@ namespace VideoClub.WebMVC
                 "~/Content/bootstrap.css",
                 "~/Content/sweetalert.css",
                 "~/Content/PagedList.css",
+                "~/Content/toastr.css",
                 "~/Content/site.css"));
 
         }

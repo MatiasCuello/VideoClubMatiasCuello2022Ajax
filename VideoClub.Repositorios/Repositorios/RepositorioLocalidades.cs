@@ -19,18 +19,21 @@ namespace VideoClub.Repositorios.Repositorios
         }
 
 
-        public void Borrar(Localidad localidad)
+        public void Borrar(int id)
         {
+            Localidad localidadInDb = null;
             try
             {
-
-                var localidadInDb = context.Localidades.SingleOrDefault(l => l.LocalidadId == localidad.LocalidadId);
-
+                localidadInDb = context.Localidades
+                    .SingleOrDefault(l => l.LocalidadId == id);
+                if (localidadInDb == null)
+                    return;
                 context.Entry(localidadInDb).State = EntityState.Deleted;
-
+                //_context.SaveChanges();
             }
             catch (Exception e)
             {
+                context.Entry(localidadInDb).State = EntityState.Unchanged;
                 throw new Exception(e.Message);
             }
         }
@@ -39,7 +42,16 @@ namespace VideoClub.Repositorios.Repositorios
         {
             try
             {
-                return false;
+                try
+                {
+                    return context.Socios.Any(l => l.LocalidadId == localidad.LocalidadId) ||
+                           context.Proveedores.Any(l => l.LocalidadId == localidad.LocalidadId)||
+                           context.Empleados.Any(l => l.LocalidadId == localidad.LocalidadId);
+                }
+                catch (Exception e)
+                {
+                    throw new Exception(e.Message);
+                }
             }
             catch (Exception e)
             {

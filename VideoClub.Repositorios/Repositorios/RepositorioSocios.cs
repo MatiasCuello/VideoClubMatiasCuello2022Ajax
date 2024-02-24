@@ -17,19 +17,22 @@ namespace VideoClub.Repositorios.Repositorios
         {
             this.context = context;
         }
-        public void Borrar(Socio socioId)
+        public void Borrar(int id)
         {
+            Socio socioInDb = null;
             try
             {
-                var socioInDb = context.Socios.SingleOrDefault(s => s.SocioId == socioId.SocioId);
-
+                socioInDb = context.Socios
+                    .SingleOrDefault(s => s.SocioId == id);
+                if (socioInDb == null)
+                    return;
                 context.Entry(socioInDb).State = EntityState.Deleted;
-                
+                //_context.SaveChanges();
             }
             catch (Exception e)
             {
-
-                throw;
+                context.Entry(socioInDb).State = EntityState.Unchanged;
+                throw new Exception(e.Message);
             }
         }
 
@@ -85,11 +88,7 @@ namespace VideoClub.Repositorios.Repositorios
         {
             try
             {
-                return context.Socios
-                    .Include(s => s.TipoDeDocumento)
-                    .Include(s => s.Localidad)
-                    .Include(s => s.Provincia)
-                    .SingleOrDefault(s => s.SocioId == id);
+                return context.Socios.SingleOrDefault(s => s.SocioId == id);
             }
             catch (Exception e)
             {
@@ -104,15 +103,15 @@ namespace VideoClub.Repositorios.Repositorios
 
                 if (socio.Provincia != null)
                 {
-                    socio.Provincia = null;
+                    context.Provincias.Attach(socio.Provincia);
                 }
                 if (socio.Localidad != null)
                 {
-                    socio.Localidad = null;
+                    context.Localidades.Attach(socio.Localidad);
                 }
                 if (socio.TipoDeDocumento != null)
                 {
-                    socio.TipoDeDocumento = null;
+                    context.TiposDeDocumentos.Attach(socio.TipoDeDocumento);
                 }
 
                 if (socio.SocioId == 0)
@@ -150,7 +149,7 @@ namespace VideoClub.Repositorios.Repositorios
             }
             catch (Exception e)
             {
-                throw new Exception(e.Message);
+                throw new Exception("Error al intentar guardar");
             }
         }
     }

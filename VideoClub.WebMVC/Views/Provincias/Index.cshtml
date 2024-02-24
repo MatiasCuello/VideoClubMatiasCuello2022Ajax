@@ -1,55 +1,161 @@
-﻿@model List<VideoClub.Entidades.Entidades.Provincia>
-@{ ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml"; }
-<ol class="breadcrumb mt-4 mb-4 ">
-    <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
-    <li class="breadcrumb-item active">Provincia</li>
-</ol>
-<div class="card">
-    <h5 class="card-header bg-primary text-white">
-        <i class="fas fa-map"></i>
-        Listado de Provincias
+﻿
+@{ ViewBag.Title = "Index"; }
 
-    </h5>
+<script src="~/Scripts/jquery-3.7.1.min.js"></script>
+<script src="~/Scripts/toastr.js"></script>
+<div class="card">
+    <h5 class="card-header bg-primary text-white">Listado de Provincias</h5>
     <div class="card-body">
-        <a href="@Url.Action("Create","Provincias")" class="btn btn-primary"><i class="fas fa-plus"></i> Nuevo</a>
+        <button id="btnNuevo" onclick="abrirModal(0)" class="btn btn-primary"><i class="fa fa-plus"></i> Nuevo </button>
         <hr />
-        <table class="table">
+        <table id="tablaProvincias" class="table display cell-border">
             <thead>
                 <tr>
-                    <th>Provincia</th>
+                    <th>Provincias</th>
                     <th></th>
                 </tr>
             </thead>
-            <tbody>
-                @if (Model.Count == 0)
-                {
-                    <tr>
-                        <td>
-                            No hay registros todavía
-                        </td>
-                    </tr>
- }
-                else
-                {
-                    foreach (var provincia in Model)
-                    {
-                        <tr>    
-                            <td>@Html.DisplayFor(modelItem => provincia.NombreProvincia)</td>
-                            <td>
-                                @Html.ActionLink("Editar", "Edit", new { id = provincia.ProvinciaId }, new { @class = "btn btn-warning" })
-                                @Html.ActionLink("Borrar", "Delete", new { id = provincia.ProvinciaId }, new { @class = "btn btn-danger" })
-
-                            </td>
-                        </tr>
-
-                    }
-                }
-            </tbody>
+            <tbody></tbody>
         </table>
-
-    </div>
-    <div class="card-footer text-muted">
-        Cantidad de registros: <strong>@Model.Count</strong>
     </div>
 </div>
+<!-- Modal -->
+<div class="modal fade" id="modalProvincia" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Datos de la Provincia</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <input type="hidden" id="ProvinciaId" />
+                    <div class="mb-3">
+                        <label for="NombreProvincia" class="col-form-label">Provincia:</label>
+                        <input type="text" class="form-control" id="NombreProvincia">
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" onclick="Guardar()" class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    <script>
+        var tablaProvincias;
+        $(document).ready(function() {
+            tablaProvincias = $('#tablaProvincias').DataTable({
+                "ajax": {
+                    "url": "@Url.Action("ListarProvincias", "Provincias")",
+                    type: "GET",
+                    dataType: "json"
+                },
+                "columns": [
+                    { "data": "NombreProvincia" },
+                    {
+                        "data": "ProvinciaId",
+                        "render": function(data) {
+                            return "<button class='btn btn-warning btn-sm' type='button' onclick='abrirModal(" +
+                                data +
+                                ")'><i class='fas fa-pen'></i></button> " +
+                                "<button class='btn btn-danger btn-sm' type='button' onclick='" +
+                                "Eliminar(" +
+                                data +
+                                ")'><i class='fas fa-trash'></i></button> ";
+                        },
+                        "orderable": false,
+                        "searchable": false,
+                        "width": "100px"
+                    }
+                ]
+
+            });
+        });
+
+
+        function abrirModal($provinciaId) {
+            $("#ProvinciaId").val($provinciaId);
+            if ($provinciaId != 0) {
+                $.ajax({
+                    "url": "@Url.Action("GetProvincia", "Provincias")" + "?provinciaId=" + $provinciaId,
+                    "type": "GET",
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function(data) {
+                        console.log(data);
+                        if (data != null) {
+                            $("#NombreProvincia").val(data.NombreProvincia);
+
+                        }
+
+                    }
+                });
+            } else {
+                $("#NombreProvincia").val("");
+
+            }
+            $("#modalProvincia").modal('show');
+        }
+
+        function Guardar() {
+            var $data = {
+                provincia: {
+                    "ProvinciaId": $("#ProvinciaId").val(),
+                    "NombreProvincia": $("#NombreProvincia").val()
+
+                }
+
+            }
+            console.log($data);
+            $.ajax({
+                "url": "@Url.Action("Guardar", "Provincias")",
+                "type": "POST",
+                "data": JSON.stringify($data),
+                "contentType": "application/json, charset=utf-8",
+                success: function(response) {
+                    if (response.resultado) {
+                        $("#modalProvincia").modal('hide');
+                        toastr.success(response.mensaje);
+                        tablaProvincias.ajax.reload();
+
+                    } else {
+                        toastr.error(response.mensaje);
+
+                    }
+                },
+                error: function(response) {
+                    toastr.error(response.mensaje);
+                }
+            });
+        }
+
+        function Eliminar($ProvinciaId) {
+            if (confirm("Desea eliminar el registro seleccionado?")) {
+                $.ajax({
+                    "url": "@Url.Action("Eliminar", "Provincias")" + "?provinciaId=" + $ProvinciaId,
+                    "type": "POST",
+                    contentType: "application/json; charset=utf-8",
+                    success: function(response) {
+                        if (response.resultado) {
+                            toastr.success(response.mensaje);
+                            tablaProvincias.ajax.reload();
+                        } else {
+                            toastr.error(response.mensaje);
+                        }
+                    },
+                    error: function(response) {
+                        toastr.error(response.mensaje);
+                    }
+                });
+
+            };
+        }
+
+    </script>
+}

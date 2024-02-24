@@ -1,26 +1,21 @@
-﻿@model List<VideoClub.Entidades.Entidades.Socio>
-@{ ViewBag.Title = "index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-<ol class="breadcrumb mt-4 mb-4 ">
-    <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
-    <li class="breadcrumb-item active">Socios</li>
-</ol>
+﻿@using System.Security.Policy
+@{ ViewBag.Title = "index"; }
+<script src="~/Scripts/jquery-3.7.1.min.js"></script>
+<script src="~/Scripts/toastr.js"></script>
 <div class="card">
     <h5 class="card-header bg-dark text-white">
-        <i class="fas fa-film"></i>
-        Listado de Socios
+        <i class="fas fa-handshake"></i> Listado de Socios
 
     </h5>
     <div class="card-body">
-        <button type="button" class="btn btn-primary" onclick="abrirModal()"><i class="fas fa-plus"></i> Nuevo Socio</button>
+        <button type="button" class="btn btn-primary" onclick="abrirModal()"><i class="fas fa-plus"></i> Nuevo</button>
         <hr />
         <table id="tabla" class="table display cell-border" style="width: 100%">
             <thead>
                 <tr>
                     <th>Nombre</th>
                     <th>Apellido</th>
-                    <th>Tipo</th>
+                    <th>Tipo Doc</th>
                     <th>Nro Doc</th>
                     <th>Direccion</th>
                     <th>Localidad</th>
@@ -47,22 +42,12 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header bg-primary text-white">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Agregar</h1>
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Informacion del Socio</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <input type="hidden" id="txtSocioId" value="0" />
-
-                    <div class="row mt-3">
-                        <div class="col-12">
-                            <div id="mensajeError" class="alert alert-danger" role="alert">
-                                A simple danger alert—check it out!
-                            </div>
-                        </div>
-                    </div>
-
-
                     <div class="col-md-6">
                         <label for="txtNombre" class="form-label">Nombre</label>
                         <input type="text" class="form-control" id="txtNombre" placeholder="Ingrese Nombre">
@@ -98,11 +83,11 @@
                         <input type="text" class="form-control" id="txtCorreoElectronico" placeholder="Ingrese Correo ">
                     </div>
 
-                    @*<div class="col-md-6">
-                        <label for="dataFechaNac" class="form-label">Fecha de Nacimiento</label>
-                        <input type="datetime" class="form-control" id="dataFechaNac" />
-                    </div>*@
-                    
+                    <div class="col-md-6">
+                        <label for="txtFechaNac" class="form-label">Fecha de Nacimiento</label>
+                        <input type="text" class="form-control" id="txtFechaNac" />
+                    </div>
+
                     <div class="col-md-6">
                         <label for="cboProvincia" class="form-label">Provincia</label>
                         <select id="cboProvincia" class="form-select" aria-label="Default select example">
@@ -133,6 +118,13 @@
                     </div>
                 </div>
             </div>
+            <div class="row mt-3">
+                <div class="col-12">
+                    <div id="mensajeError" class="alert alert-danger" role="alert">
+                        A simple danger alert—check it out!
+                    </div>
+                </div>
+            </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                 <button type="button" class="btn btn-primary" onclick="Guardar()">Guardar</button>
@@ -144,114 +136,24 @@
 {
     <script>
         var tablaSocios;
-        var filaSeleccionada;
         var localidadDelSocio = 0;
-
         $(document).ready(function() {
-            CargarTabla();
+            cargarCboProvincias();
             cargarCboTipoDocumento();
-            cargarCboProvincias();
-            cargarCboLocalidad();
-
-
-            $("#tabla tbody").on("click",
-                '.btn-editar',
-                function() {
-
-                    filaSeleccionada = $(this).closest("tr");
-                    var datos = tablaSocios.row(filaSeleccionada).data();
-                    abrirModal(datos);
-
-                });
-
-
-            $("#tabla tbody").on("click",
-                ".btn-borrar",
-                function() {
-                    var socioSeleccionado = $(this).closest("tr");
-                    var datosSocios = tablaSocios.row(socioSeleccionado).data();
-
-
-                    swal({
-                            title: "¿Está seguro?",
-                            text: "¿Desea eliminar el registro seleccionado?",
-                            type: "warning",
-                            showCancelButton: true,
-                            confirmButtonClass: "btn-danger",
-                            confirmButtonText: "SI",
-                            cancelButtonText: "NO",
-                            closeOnConfirm: false
-                        },
-                        function() {
-
-                            jQuery.ajax({
-                                url: "@Url.Action("EliminarSocio", "Socio")",
-                                type: "POST",
-                                data: JSON.stringify({ id: datosSocios.SocioId }),
-                                dataType: "json",
-                                contentType: "application/json; charset=utf-8",
-                                success: function(data) {
-
-                                    if (data.resultado) {
-                                        tablaSocios.row(socioSeleccionado).remove().draw();
-                                        swal("Borrado!", "Registro eliminado!!!", "success");
-                                    } else {
-                                        swal("No se pudo eliminar!", data.mensaje, "error");
-                                    }
-
-
-                                },
-                                error: function(error) {
-                                    console.log(error);
-                                },
-                                beforeSend: function() {
-
-                                }
-                            });
-
-
-                        });
-                });
-
-        });
-
-
-        function CargarTabla() {
-            cargarCboProvincias();
             tablaSocios = $("#tabla").DataTable({
-                responsive: "true",
-                ordering: "false",
                 "ajax": {
-                    url: "@Url.Action("ListarSocios", "Socio")",
-                    type: "GET",
-                    dataType: "json"
+                    "url": "@Url.Action("ListarSocios", "Socio")",
+                    "type": "GET",
+                    "dataType": "json"
                 },
                 "columns": [
                     { "data": "Nombre" },
                     { "data": "Apellido" },
-                    {
-                        "data": "TipoDeDocumento",
-                        render: function(data) {
-                            return data.Descripcion
-                        }
-
-                    },
+                    { "data": "TipoDeDocumento", render: function(data) { return data.Descripcion } },
                     { "data": "NroDocumento" },
                     { "data": "Direccion" },
-                    {
-                        "data": "Localidad",
-                        render: function(data) {
-                            return data.NombreLocalidad
-                        }
-
-                    },
-                    {
-                        "data": "Provincia",
-                        render: function(data) {
-                            return data.NombreProvincia
-                        }
-
-                    },
+                    { "data": "Localidad", render: function(data) { return data.NombreLocalidad } },
+                    { "data": "Provincia", render: function(data) { return data.NombreProvincia } },
                     { "data": "TelefonoFijo" },
                     { "data": "TelefonoMovil" },
                     { "data": "CorreoElectronico" },
@@ -268,8 +170,8 @@
                     },
                     {
                         "data": "Activo",
-                        render: function(valorDeActiva) {
-                            if (valorDeActiva) {
+                        render: function(valorDeActivo) {
+                            if (valorDeActivo) {
                                 return '<span class="badge text-bg-success">SI</span>';
                             } else {
                                 return '<span class="badge text-bg-danger">NO</span>';
@@ -278,119 +180,26 @@
                         }
                     },
                     {
-                        "defaultContent":
-                            '<button type="button" class="btn btn-warning mx-1 btn-editar"  ><i class="fas fa-pen"></i></button>' +
-                                '<button type="button" class="btn btn-danger mx-1 btn-borrar" ><i class="fas fa-trash"></i></button>',
-                        "orderable": false,
-                        "searchable": false,
+                        "data": "SocioId",
+                        "render": function(data) {
+                            return "<button class='btn btn-warning btn-sm btn-editar' type='button' onclick='abrirModal(" +
+                                data +
+                                ")'><i class='fas fa-pen'></i></button> " +
+                                "<button class='btn btn-danger btn-sm' type='button' onclick='Eliminar(" +
+                                data +
+                                ")'><i class='fas fa-trash'></i></button> ";
+                        }
                     }
                 ]
 
             });
-            $('#cboProvincia').change(function() {
-                var provinciaId = $('#cboProvincia').val();
-                if (provinciaId > 0) {
-                    cargarCboLocalidad();
-
-                }
-            });
-        }
-
-        function abrirModal($SocioId) {
-            $('#mensajeError').hide();
-            if ($SocioId == 0) {
-                $("#txtSocioId").val(0);
-                $("#txtNombre").val("");
-                $("#txtApellido").val("");
-                $("#txtNumeroDeDocumento").val("");
-                $("#txtDireccion").val("");
-                $("#txtTelefonoFijo").val("");
-                $("#txtTelefonoMovil").val("");
-                $("#txtCorreoElectronico").val("");
-                $("#dataFechaNac").val("");
-                $("#cboSancionado").val(0);
-                $("#cboActivo").val(1);
-                $("#cboTipoDocumento option:first").val();
-                $("#cboProvincia option:first").val();
-                $("#cboLocalidad option:first").val();;
-            } else {
-                $.ajax({
-                    "url": "@Url.Action("ListarSocios", "Socio")" + "?socioId=" + $SocioId,
-                    "type": "GET",
-                    "dataType": "json",
-                    "contentType": "application/json, charset=utf-8",
-                    success: function(socio) {
-                        localidadDelSocio = socio.SocioId;
-                        $("#txtSocioId").val(socio.SocioId);
-                        $("#txtNombre").val(socio.Nombre);
-                        $("#txtApellido").val(socio.Apellido);
-                        $("#txtNumeroDeDocumento").val(socio.NroDocumento);
-                        $("#txtDireccion").val(socio.Direccion);
-                        $("#txtTelefonoFijo").val(socio.TelefonoFijo);
-                        $("#txtTelefonoMovil").val(socio.TelefonoMovil);
-                        $("#txtCorreoElectronico").val(socio.CorreoElectronico);
-                        $("#dataFechaNac").val(socio.FechaDeNacimiento);
-                        $("#cboSancionado").val(socio.Sancionado == true ? 1 : 0);
-                        $("#cboActivo").val(socio.Activo == true ? 1 : 0);
-
-                        $("#cboProvincia").val(socio.ProvinciaId);
-                        $("#cboLocalidad").val(socio.LocalidadId);
-                        $("#cboTipoDocumento").val(socio.TipoDeDocumentoId);
-
-                    },
-                    error: function(err) {
-                        console.log(err);
-                    }
-                });
+        });
+        $('#cboProvincia').change(function() {
+            var provinciaId = $('#cboProvincia').val();
+            if (provinciaId > 0) {
+                cargarCboLocalidades();
             }
-            $("#FormModal").modal("show");
-        }
-
-        function cargarCboProvincias() {
-            $('#cboProvincia').empty();
-            $('#cboLocalidad').empty();
-            $.ajax({
-                "url": "@Url.Action("ListarProvincias", "Provincias")",
-                "type": "GET",
-                "dataType": "json",
-                "contentType": "application/json; charset=utf-8",
-                success: function(provincias) {
-                    console.log(provincias);
-                    $('#cboProvincia').append('<option selected disabled value = "" > ' + 'Seleccionar' + '</option>');
-                    $.each(provincias.data,
-                        function(index, provincia) {
-                            $("#cboProvincia").append('<option value="' + provincia.ProvinciaId + '">' + provincia.NombreProvincia + '</option>');
-                        });
-
-                }
-            });
-
-        }
-
-        function cargarCboLocalidad() {
-            var provinciaId = $('#cboProvincia').val()
-            $('#cboLocalidad').empty();
-            $.ajax({
-                "url": "@Url.Action("ListarLocalidades", "Localidad")" + "?provinciaId=" + provinciaId,
-                "type": "GET",
-                "dataType": "json",
-                "contentType": "application/json; charset=utf-8",
-                success: function(localidades) {
-                    console.log(localidades);
-                    $('#cboLocalidad').append('<option selected disabled value = "" > ' + 'Seleccionar' + '</option>');
-                    $.each(localidades.data,
-                        function(index, localidad) {
-                            $("#cboLocalidad").append('<option value="' + localidad.LocalidadId + '">' + localidad.NombreLocalidad + '</option>');
-                        });
-                    if (localidadDelSocio != 0) {
-                        $('#cboLocalidad option[value=' + localidadDelSocio + ']').attr("selected", true);
-
-                    }
-
-                }
-            });
-
-        }
+        });
 
         function cargarCboTipoDocumento() {
 
@@ -400,7 +209,7 @@
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 success: function(tipoDeDocumentos) {
-                    console.log(tipoDeDocumentos);
+                    /*console.log(tipoDeDocumentos);*/
 
                     $('#cboTipoDocumento')
                         .append('<option selected disabled value = "" > ' + 'Seleccionar' + '</option>');
@@ -416,6 +225,191 @@
                 }
             });
         }
+
+        function cargarCboProvincias() {
+            $('#cboProvincia').empty();
+            $('#cboLocalidad').empty();
+            $.ajax({
+                "url": "@Url.Action("ListarProvincias", "Socio")",
+                "type": "GET",
+                "dataType": "json",
+                "contentType": "application/json; charset=utf-8",
+                success: function(provincias) {
+                    console.log(provincias);
+                    $('#cboProvincia').append('<option selected disabled value = "" > ' + 'Seleccionar' + '</option>');
+                    $.each(provincias.data,
+                        function(index, provincia) {
+                            $("#cboProvincia").append('<option value="' +
+                                provincia.ProvinciaId +
+                                '">' +
+                                provincia.NombreProvincia +
+                                '</option>');
+                        });
+
+                }
+            });
+
+        }
+
+        function cargarCboLocalidades() {
+            var provinciaId = $('#cboProvincia').val()
+            $('#cboLocalidad').empty();
+            $.ajax({
+                "url": "@Url.Action("ListarLocalidades", "Socio")" + "?provinciaId=" + provinciaId,
+                "type": "POST",
+                "dataType": "json",
+                "contentType": "application/json; charset=utf-8",
+                success: function(localidades) {
+                    console.log(localidades);
+                    $('#cboLocalidad').append('<option selected disabled value = "" > ' + 'Seleccionar' + '</option>');
+                    $.each(localidades.data,
+                        function(index, localidad) {
+                            $("#cboLocalidad").append('<option value="' +
+                                localidad.LocalidadId +
+                                '">' +
+                                localidad.NombreLocalidad +
+                                '</option>');
+                        });
+                    if (localidadDelSocio != 0) {
+                        $('#cboLocalidad option[value=' + localidadDelSocio + ']').attr("selected", true);
+
+                    }
+
+                }
+            });
+
+        }
+
+        function abrirModal($SocioId) {
+            $('#mensajeError').hide();
+            if ($SocioId == 0) {
+                $("#txtSocioId").val(0);
+                $("#txtNombre").val("");
+                $("#txtApellido").val("");
+                $("#txtNumeroDeDocumento").val("");
+                $("#txtDireccion").val("");
+                $("#txtTelefonoFijo").val("");
+                $("#txtTelefonoMovil").val("");
+                $("#txtCorreoElectronico").val("");
+                $("#txtFechaNac").val("");
+                $("#cboSancionado").val(0);
+                $("#cboActivo").val(1);
+                $("#cboTipoDocumento option:first").val();
+                $("#cboProvincia option:first").val();
+                $("#cboLocalidad option:first").val();;
+            } else {
+                $.ajax({
+                    "url": "@Url.Action("ListarSocio", "Socio")" + "?socioId=" + $SocioId,
+                    "type": "GET",
+                    "dataType": "json",
+                    "contentType": "application/json, charset=utf-8",
+                    success: function(socio) {
+                        localidadDelSocio = socio.LocalidadId;
+                        $("#txtSocioId").val(socio.SocioId);
+                        $("#txtNombre").val(socio.Nombre);
+                        $("#txtApellido").val(socio.Apellido);
+                        $("#txtNumeroDeDocumento").val(socio.NroDocumento);
+                        $("#txtDireccion").val(socio.Direccion);
+                        $("#txtTelefonoFijo").val(socio.TelefonoFijo);
+                        $("#txtTelefonoMovil").val(socio.TelefonoMovil);
+                        $("#txtCorreoElectronico").val(socio.CorreoElectronico);
+                        $("#txtFechaNac").val(socio.FechaDeNacimiento);
+                        $("#cboSancionado").val(socio.Sancionado == true ? 1 : 0);
+                        $("#cboActivo").val(socio.Activo == true ? 1 : 0);
+
+                        $("#cboProvincia").val(socio.ProvinciaId);
+                        cargarCboLocalidades();
+                        $("#cboLocalidad").val(socio.LocalidadId);
+                        $("#cboTipoDocumento").val(socio.TipoDeDocumentoId);
+
+                    },
+                    error: function(err) {
+                        console.log(err);
+                    }
+                });
+            }
+            $("#FormModal").modal("show");
+        }
+
+        function Guardar() {
+
+            var socio = {
+                SocioId: $("#txtSocioId").val() || 0,
+                Nombre: $("#txtNombre").val(),
+                Apellido: $("#txtApellido").val(),
+                NroDocumento: $("#txtNumeroDeDocumento").val(),
+                Direccion: $("#txtDireccion").val(),
+                TelefonoFijo: $("#txtTelefonoFijo").val(),
+                TelefonoMovil: $("#txtTelefonoMovil").val(),
+                CorreoElectronico: $("#txtCorreoElectronico").val(),
+                FechaDeNacimiento: $("#txtFechaNac").val(),
+                TipoDeDocumentoId: $("#cboTipoDocumento option:selected").val(),
+                ProvinciaId: $("#cboProvincia option:selected").val(),
+                LocalidadId: $("#cboLocalidad option:selected").val(),
+
+                Sancionado: $("#cboSancionado").val() == 1 ? true : false,
+                Activo: $("#cboActivo").val() == 1 ? true : false
+            }
+            console.log(socio);
+            var request = new FormData();
+            request.append("objeto", JSON.stringify(socio));
+            $.ajax({
+                "url": "@Url.Action("GuardarSocio", "Socio")",
+                "type": "POST",
+                "dataType": "json",
+                data: request,
+                processData: false,
+                contentType: false,
+
+                success: function(response) {
+                    $(".modal-body").LoadingOverlay("hide");
+                    if (response.respuesta) {
+                        toastr.success(response.mensaje);
+                        $('#FormModal').modal('hide');
+                        tablaSocios.ajax.reload();
+                    } else {
+                        $("#mensajeError").text(response.mensaje);
+                        $("#mensajeError").show();
+                    }
+                },
+                error: function() {
+                    console.log('error');
+                },
+                beforeSend: function() {
+                    $(".modal-body").LoadingOverlay("show",
+                        {
+                            imageResizeFactory: 2,
+                            text: "Guardando...",
+                            size: 14
+                        });
+
+                }
+
+            });
+        };
+
+        function Eliminar($SocioId) {
+            if (confirm("Desea eliminar el registro seleccionado?")) {
+                $.ajax({
+                    "url": "@Url.Action("EliminarSocio", "Socio")" + "?socioId=" + $SocioId,
+                    "type": "POST",
+                    contentType: "application/json; charset=utf-8",
+                    success: function(response) {
+                        if (response.resultado) {
+                            toastr.success(response.mensaje);
+                            tablaSocios.ajax.reload();
+                        } else {
+                            toastr.error(response.mensaje);
+                        }
+                    },
+                    error: function(response) {
+                        toastr.error(response.mensaje);
+                    }
+                });
+
+            };
+        }
+
 
     </script>
 }

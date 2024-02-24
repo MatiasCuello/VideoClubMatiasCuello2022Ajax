@@ -12,7 +12,8 @@ using Newtonsoft.Json;
 using VideoClub.Entidades.Entidades;
 using VideoClub.Servicios.Servicios.Facades;
 using VideoClub.WebMVC.App_Start;
-using VideoClub.WebMVC.Models.Pelicula;
+using VideoClub.WebMVC.Models.Localidad;
+using VideoClub.WebMVC.Models.Provincia;
 using VideoClub.WebMVC.Models.Socio;
 
 namespace VideoClub.WebMVC.Controllers
@@ -38,53 +39,69 @@ namespace VideoClub.WebMVC.Controllers
         {
             return View();
         }
+
         [HttpGet]
         public JsonResult ListarSocios()
         {
-            var lista = servicio.GetLista();
-            var listaVm = mapper.Map<List<SocioListVm>>(lista);
-            return Json(new { data = listaVm }, JsonRequestBehavior.AllowGet);
+            var listaSociosVm = mapper.Map<List<SocioListVm>>(servicio.GetLista());
+            return Json(new { data = listaSociosVm }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public JsonResult ListarSocio(int socioId)
+        {
+            var socioVm = mapper.Map<SocioEditVm>(servicio.GetSocioPorId(socioId));
+            return Json(socioVm, JsonRequestBehavior.AllowGet);
+        }
+        [HttpGet]
+        public JsonResult ListarProvincias()
+        {
+            var listaProvinciasVm = mapper.Map<List<ProvinciaListVm>>(servicioProvincias.GetLista());
+            return Json(new { data = listaProvinciasVm }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult ListarLocalidades(int provinciaId)
+        {
+            var listaLocalidadesVm = mapper.Map<List<LocalidadListVm>>(servicioLocalidades.GetLista(provinciaId));
+            return Json(new { data = listaLocalidadesVm }, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
         public JsonResult GuardarSocio(string objeto)
         {
-            object resultado = null;
+            bool respuesta = true;
             string mensaje = string.Empty;
 
+            Socio socio = new Socio();
+            socio = JsonConvert.DeserializeObject<Socio>(objeto);
+
+            mensaje = ValidarSocio(socio);
+            if (mensaje != string.Empty)
+            {
+                respuesta = false;
+                return Json(new { respuesta = respuesta, mensaje = mensaje }, JsonRequestBehavior.AllowGet);
+            }
             try
             {
-
-                Socio socioRecibido = new Socio();
-                socioRecibido = JsonConvert.DeserializeObject<Socio>(objeto);
-                mensaje = ValidarSocio(socioRecibido);
-
-                if (mensaje == String.Empty)
+                if (servicio.Existe(socio))
                 {
-                    if (!servicio.Existe(socioRecibido))
-                    {
-                        servicio.Guardar(socioRecibido);
-                        resultado = socioRecibido.SocioId;
-                        mensaje = "Socio agregado/editado";
-                    }
-                    else
-                    {
-                        resultado = 0;
-                        mensaje = "Socio existente";
-                    }
+                    respuesta = false;
+                    mensaje = "Socio existente!";
+                    return Json(new { respuesta = respuesta, mensaje = mensaje }, JsonRequestBehavior.AllowGet);
                 }
-                else
-                {
-                    resultado = 0;
-                }
+                servicio.Guardar(socio);
+                respuesta = true;
+                mensaje = "Registro guardado";
+                return Json(new { respuesta = respuesta, mensaje = mensaje }, JsonRequestBehavior.AllowGet);
+
             }
             catch (Exception e)
             {
-                resultado = 0;
-                mensaje = e.Message;
+                respuesta = false;
+                mensaje = "Error al intentar guardar el registro";
+                return Json(new { respuesta = respuesta, mensaje = mensaje }, JsonRequestBehavior.AllowGet);
 
             }
-
-            return Json(new { resultado = resultado, mensaje = mensaje }, JsonRequestBehavior.AllowGet);
         }
         private string ValidarSocio(Socio socio)
         {
@@ -97,10 +114,17 @@ namespace VideoClub.WebMVC.Controllers
             {
                 sb.AppendLine("Apellido del socio es requerido");
             }
-
+            if (socio.TipoDeDocumentoId == 0)
+            {
+                sb.AppendLine("Debe seleccionar una tipo de documento");
+            }
             if ((socio.NroDocumento == null))
             {
                 sb.AppendLine("Numero de Documento del socio es requerido");
+            }
+            if (string.IsNullOrEmpty(socio.Direccion))
+            {
+                sb.AppendLine("La direccion es requerida");
             }
             if (socio.ProvinciaId == 0)
             {
@@ -110,64 +134,39 @@ namespace VideoClub.WebMVC.Controllers
             {
                 sb.AppendLine("Debe seleccionar una localidad");
             }
-            if (socio.TipoDeDocumentoId == 0)
-            {
-                sb.AppendLine("Debe seleccionar una tipo de documento");
-            }
+           
+
 
             return sb.ToString();
         }
         [HttpPost]
-        public JsonResult EliminarSocio(int id)
+        public JsonResult EliminarSocio(int socioId)
         {
-            bool respuesta = false;
-            string mensaje = string.Empty;
+            var respuesta = true;
+            var mensaje = string.Empty;
             try
             {
-                Socio socio = servicio.GetSocioPorId(id);
-                if (!servicio.EstaRelacionado(socio))
-                {
-                    servicio.Borrar(socio);
-                    respuesta = true;
-                    mensaje = "Socio eliminado";
-                }
-                else
+                var socio = servicio.GetSocioPorId(socioId);
+                if (servicio.EstaRelacionado(socio))
                 {
                     respuesta = false;
-                    mensaje = "Socio relacionado... Baja denegada";
+                    mensaje = "Socio relacionado... \nNo se pudo eliminar el socio";
+                    return Json(new { resultado = respuesta, mensaje = mensaje }, JsonRequestBehavior.AllowGet);
                 }
+                servicio.Borrar(socio.SocioId);
+                respuesta = true;
+                mensaje = "Socio eliminado!";
+                return Json(new { resultado = respuesta, mensaje = mensaje }, JsonRequestBehavior.AllowGet);
+
             }
             catch (Exception e)
             {
                 respuesta = false;
-                mensaje = e.Message;
+                mensaje = "Error al intentar eliminar el socio";
+                return Json(new { resultado = respuesta, mensaje = mensaje }, JsonRequestBehavior.AllowGet);
             }
 
-            return Json(new { resultado = respuesta, mensaje = mensaje }, JsonRequestBehavior.AllowGet);
-
         }
-        public JsonResult ObtenerLocalidadesPorProvincia(int provinciaId)
-        {
-            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["MiConexion"].ConnectionString))
-            {
-                connection.Open();
-                using (SqlCommand cmd = new SqlCommand("ObtenerLocalidadesPorProvincia", connection))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@ProvinciaId", provinciaId);
 
-                    using (SqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        var localidades = new List<object>();
-                        while (reader.Read())
-                        {
-                            localidades.Add(new { LocalidadId = reader.GetInt32(0), NombreLocalidad = reader.GetString(1) });
-                        }
-
-                        return Json(localidades, JsonRequestBehavior.AllowGet);
-                    }
-                }
-            }
-        }
     }
 }

@@ -163,6 +163,7 @@
     <Compile Include="Models\Pelicula\PeliculaListVm.cs" />
     <Compile Include="Models\Proveedor\ProveedorListVm.cs" />
     <Compile Include="Models\Provincia\ProvinciaEditVm.cs" />
+    <Compile Include="Models\Provincia\ProvinciaListVm.cs" />
     <Compile Include="Models\Socio\SocioEditVm.cs" />
     <Compile Include="Models\Socio\SocioListVm.cs" />
     <Compile Include="Models\Soporte\SoporteEditVm.cs" />
@@ -356,6 +357,8 @@
     <Content Include="Content\svg-with-js.css" />
     <Content Include="Content\svg-with-js.min.css" />
     <Content Include="Content\sweetalert.css" />
+    <Content Include="Content\toastr.css" />
+    <Content Include="Content\toastr.min.css" />
     <Content Include="Content\v4-shims.css" />
     <Content Include="Content\v4-shims.min.css" />
     <Content Include="favicon.ico" />
@@ -461,6 +464,8 @@
     <Content Include="Scripts\fontawesome\solid.min.js" />
     <Content Include="Scripts\fontawesome\v4-shims.js" />
     <Content Include="Scripts\fontawesome\v4-shims.min.js" />
+    <Content Include="Content\toastr.scss" />
+    <Content Include="Content\toastr.less" />
     <None Include="Scripts\jquery-3.7.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.1.js" />
     <Content Include="Scripts\jquery-3.7.1.min.js" />
@@ -476,6 +481,8 @@
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\scripts.js" />
     <Content Include="Scripts\sweetalert.min.js" />
+    <Content Include="Scripts\toastr.js" />
+    <Content Include="Scripts\toastr.min.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -519,17 +526,11 @@
     <Content Include="Views\Soporte\Delete.cshtml" />
     <Content Include="Views\Pelicula\Index.cshtml" />
     <Content Include="Views\Provincias\Index.cshtml" />
-    <Content Include="Views\Provincias\Create.cshtml" />
-    <Content Include="Views\Provincias\Delete.cshtml" />
-    <Content Include="Views\Provincias\Edit.cshtml" />
     <Content Include="Views\Estado\Index.cshtml" />
     <Content Include="Views\Estado\Create.cshtml" />
     <Content Include="Views\Estado\Edit.cshtml" />
     <Content Include="Views\Estado\Delete.cshtml" />
     <Content Include="Views\Localidad\Index.cshtml" />
-    <Content Include="Views\Localidad\Create.cshtml" />
-    <Content Include="Views\Localidad\Edit.cshtml" />
-    <Content Include="Views\Localidad\Delete.cshtml" />
     <Content Include="Views\TipoDeDocumento\Index.cshtml" />
     <Content Include="Views\Socio\Index.cshtml" />
     <Content Include="Views\Empleado\Index.cshtml" />

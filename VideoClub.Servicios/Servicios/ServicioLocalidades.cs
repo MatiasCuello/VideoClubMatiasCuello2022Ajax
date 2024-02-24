@@ -48,11 +48,11 @@ namespace VideoClub.Servicios.Servicios
                 throw new Exception(e.Message);
             }
         }
-        public void Borrar(Localidad localidad)
+        public void Borrar(int id)
         {
             try
             {
-                repositorio.Borrar(localidad);
+                repositorio.Borrar(id);
                 unitOfWork.Save();
 
             }

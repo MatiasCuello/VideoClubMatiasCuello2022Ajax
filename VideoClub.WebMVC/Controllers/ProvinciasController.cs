@@ -10,6 +10,7 @@ using VideoClub.Servicios.Servicios;
 using VideoClub.Servicios.Servicios.Facades;
 using VideoClub.WebMVC.App_Start;
 using VideoClub.WebMVC.Models.Calificacion;
+using VideoClub.WebMVC.Models.Provincia;
 using VideoClub.WebMVC.Models.Provincias;
 
 namespace VideoClub.WebMVC.Controllers
@@ -26,131 +27,81 @@ namespace VideoClub.WebMVC.Controllers
             mapper = AutoMapperConfig.Mapper;
         }
 
-        [HttpGet]
-        public JsonResult ListarProvincias()
-        {
-            var lista = servicio.GetLista();
-            return Json(new { data = lista }, JsonRequestBehavior.AllowGet);
-        }
         public ActionResult Index()
         {
             var lista = servicio.GetLista();
             return View(lista);
         }
+
         [HttpGet]
-        public ActionResult Create()
+        public JsonResult ListarProvincias()
         {
-            return View();
+            var listaVm = mapper.Map<List<ProvinciaListVm>>(servicio.GetLista());
+
+            return Json(new { data = listaVm }, JsonRequestBehavior.AllowGet);
         }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(ProvinciaEditVm provinciaEditVm)
+        [HttpGet]
+        public JsonResult GetProvincia(int provinciaId)
         {
-            if (!ModelState.IsValid)
+            var provinciaVm = mapper.Map<ProvinciaEditVm>(servicio.GetProvinciaPorId(provinciaId));
+            return Json(provinciaVm, JsonRequestBehavior.AllowGet);
+        }
+
+
+        [HttpPost]
+        public JsonResult Guardar(Provincia provincia)
+        {
+            bool respuesta = true;
+            string mensaje = string.Empty;
+
+            if (servicio.Existe(provincia))
             {
-                return View(provinciaEditVm);
+                respuesta = false;
+                mensaje = "Provincia Repetida!";
+                return Json(new { resultado = respuesta, mensaje = mensaje }, JsonRequestBehavior.AllowGet);
             }
+
             try
             {
-                Provincia provincia = mapper.Map<Provincia>(provinciaEditVm);
-                if (servicio.Existe(provincia))
-                {
-                    ModelState.AddModelError(string.Empty, "Provincia existente!!!");
-                    return View(provinciaEditVm);
-                }
                 servicio.Guardar(provincia);
-                return RedirectToAction("Index");
+                respuesta = true;
+                mensaje = "Registro guardado";
+                return Json(new { resultado = respuesta, mensaje = mensaje }, JsonRequestBehavior.AllowGet);
+
             }
             catch (Exception e)
             {
-                ModelState.AddModelError(string.Empty, e.Message);
-                return View(provinciaEditVm);
+                respuesta = false;
+                mensaje = "Error al intentar guardar el registro";
+                return Json(new { resultado = respuesta, mensaje = mensaje }, JsonRequestBehavior.AllowGet);
             }
-        }
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            Provincia provincia = servicio.GetProvinciaPorId(id.Value);
-            if (provincia == null)
-            {
-                return HttpNotFound("El codigo de la Provincia no existe!");
-            }
-
-            ProvinciaEditVm provinciaEditVm = mapper.Map<ProvinciaEditVm>(provincia);
-            return View(provinciaEditVm);
 
         }
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(ProvinciaEditVm provinciaEditVm)
+        public JsonResult Eliminar(int provinciaId)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(provinciaEditVm);
-            }
-
-            Provincia provincia = mapper.Map<Provincia>(provinciaEditVm);
+            var respuesta = true;
+            var mensaje = string.Empty;
             try
             {
-                if (servicio.Existe(provincia))
-                {
-                    ModelState.AddModelError(string.Empty, "Provincia existente!");
-                    return View(provinciaEditVm);
-                }
-                servicio.Guardar(provincia);
-                return RedirectToAction("Index");
-            }
-            catch (Exception e)
-            {
-                ModelState.AddModelError(string.Empty, e.Message);
-                return View(provinciaEditVm);
-            }
-        }
-        [HttpGet]
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-
-            }
-
-            Provincia provincia = servicio.GetProvinciaPorId(id.Value);
-            if (provincia == null)
-            {
-                return HttpNotFound("El codigo de la provincia no existe!");
-            }
-
-            ProvinciaEditVm provinciaEditVm = mapper.Map<ProvinciaEditVm>(provincia);
-            return View(provinciaEditVm);
-        }
-
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirm(int id)
-        {
-            Provincia provincia = servicio.GetProvinciaPorId(id);
-            try
-            {
+                var provincia = servicio.GetProvinciaPorId(provinciaId);
                 if (servicio.EstaRelacionado(provincia))
                 {
-                    ProvinciaEditVm provinciaEditVm = mapper.Map<ProvinciaEditVm>(provincia);
-                    ModelState.AddModelError(string.Empty, "Provincia relacionada!");
-                    return View(provinciaEditVm);
+                    respuesta = false;
+                    mensaje = "Provincia relacionada... \nNo se pudo eliminar la provincia";
+                    return Json(new { resultado = respuesta, mensaje = mensaje }, JsonRequestBehavior.AllowGet);
                 }
+                servicio.Borrar(provincia.ProvinciaId);
+                respuesta = true;
+                mensaje = "Provincia eliminada!";
+                return Json(new { resultado = respuesta, mensaje = mensaje }, JsonRequestBehavior.AllowGet);
 
-                servicio.Borrar(provincia);
-                return RedirectToAction("Index");
             }
             catch (Exception e)
             {
-                ProvinciaEditVm provinciaEditVm = mapper.Map<ProvinciaEditVm>(provincia);
-                ModelState.AddModelError(string.Empty, e.Message);
-                return View(provinciaEditVm);
+                respuesta = false;
+                mensaje = "Error al intentar eliminar la provincia";
+                return Json(new { resultado = respuesta, mensaje = mensaje }, JsonRequestBehavior.AllowGet);
             }
         }
 

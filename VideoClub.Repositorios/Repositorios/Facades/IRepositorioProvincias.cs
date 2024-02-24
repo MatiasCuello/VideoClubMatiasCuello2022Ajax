@@ -15,7 +15,7 @@ namespace VideoClub.Repositorios.Repositorios.Facades
         void Guardar(Provincia provincia);
         bool Existe(Provincia provincia);
         bool EstaRelacionado(Provincia provincia);
-        void Borrar(Provincia provincia);
+        void Borrar(int id);
 
     }
 }

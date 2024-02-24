@@ -116,7 +116,6 @@
 
         $(document).ready(function() {
             CargarTabla();
-            //cargarCboTipoDocumento();
             //cargarCboProvincias();
             //cargarCboLocalidad();
         });
@@ -256,30 +255,6 @@
 
         }*@
 
-        @*function cargarCboTipoDocumento() {
-
-            jQuery.ajax({
-                url: "@Url.Action("ListarTiposDeDocumentos", "TipoDeDocumento")",
-                type: "GET",
-                dataType: "json",
-                contentType: "application/json; charset=utf-8",
-                success: function(tipoDeDocumentos) {
-                    console.log(tipoDeDocumentos);
-
-                    $('#cboTipoDocumento')
-                        .append('<option selected disabled value = "" > ' + 'Seleccionar' + '</option>');
-                    $.each(tipoDeDocumentos.data,
-                        function(index, tipoDeDocumento) {
-                            $("#cboTipoDocumento").append('<option value="' +
-                                tipoDeDocumento.TipoDeDocumentoId +
-                                '">' +
-                                tipoDeDocumento.Descripcion +
-                                '</option>');
-                        });
-
-                }
-            });
-        }*@
 
     </script>
 }

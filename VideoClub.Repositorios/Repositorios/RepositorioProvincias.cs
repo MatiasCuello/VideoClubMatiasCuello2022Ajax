@@ -19,22 +19,35 @@ namespace VideoClub.Repositorios.Repositorios
                 this.context = context;
             }
 
-            public void Borrar(Provincia provincia)
+            public void Borrar(int id)
             {
+                Provincia provinciaInDb = null;
                 try
                 {
-                    context.Entry(provincia).State = EntityState.Deleted;
-                    //context.SaveChanges();
+                    provinciaInDb = context.Provincias
+                        .SingleOrDefault(p => p.ProvinciaId == id);
+                    if (provinciaInDb == null)
+                        return;
+                    context.Entry(provinciaInDb).State = EntityState.Deleted;
+                    //_context.SaveChanges();
                 }
                 catch (Exception e)
                 {
+                    context.Entry(provinciaInDb).State = EntityState.Unchanged;
                     throw new Exception(e.Message);
                 }
             }
 
             public bool EstaRelacionado(Provincia provincia)
             {
-                return false;
+                try
+                {
+                    return context.Localidades.Any(l => l.ProvinciaId == provincia.ProvinciaId);
+                }
+                catch (Exception e)
+                {
+                    throw new Exception(e.Message);
+                }
             }
 
             public bool Existe(Provincia provincia)
@@ -43,11 +56,11 @@ namespace VideoClub.Repositorios.Repositorios
                 {
                     if (provincia.ProvinciaId == 0)
                     {
-                        return context.Provincias.Any(c => c.NombreProvincia == provincia.NombreProvincia);
+                        return context.Provincias.Any(p => p.NombreProvincia == provincia.NombreProvincia);
                     }
 
-                    return context.Provincias.Any(c => c.NombreProvincia == provincia.NombreProvincia
-                                                       && c.ProvinciaId != provincia.ProvinciaId);
+                    return context.Provincias.Any(p => p.NombreProvincia == provincia.NombreProvincia
+                                                       && p.ProvinciaId != provincia.ProvinciaId);
                 }
                 catch (Exception e)
                 {

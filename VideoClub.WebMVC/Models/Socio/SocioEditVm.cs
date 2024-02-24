@@ -28,7 +28,7 @@ namespace VideoClub.WebMVC.Models.Socio
 
         [Required(ErrorMessage = "El campo {0} es requerido")]
         [StringLength(8, ErrorMessage = "el campo {0} debe tener {8} caracteres", MinimumLength = 8)]
-        public string NumeroDeDocumento { get; set; }
+        public string NroDocumento { get; set; }
 
         [Required(ErrorMessage = "El campo {0} es requerido")]
         [StringLength(50, ErrorMessage = "el campo {0} debe tener entre {2} y {1} caracteres", MinimumLength = 2)]
@@ -48,6 +48,12 @@ namespace VideoClub.WebMVC.Models.Socio
         [Required(ErrorMessage = "El campo {0} es requerido")]
         [StringLength(50, ErrorMessage = "el campo {0} debe tener entre {2} y {1} caracteres", MinimumLength = 2)]
         public string CorreoElectronico { get; set; }
+
+        [DisplayName("Tel. FIjo")]
+        public string TelefonoFijo { get; set; }
+
+        [DisplayName("Tel. Movil")]
+        public string TelefonoMovil { get; set; }
 
         [DisplayName("FechaNac")]
         [Required(ErrorMessage = "El campo {0} es requerido")]

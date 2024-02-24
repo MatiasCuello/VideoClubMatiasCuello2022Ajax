@@ -13,7 +13,7 @@ namespace VideoClub.Servicios.Servicios.Facades
         List<Localidad> GetLista(int provinciaId);
         void Guardar(Localidad localidad);
         bool Existe(Localidad localidad);
-        void Borrar(Localidad localidad);
+        void Borrar(int id);
         bool EstaRelacionado(Localidad localidad);
         Localidad GetLocalidadPorId(int id);
     }

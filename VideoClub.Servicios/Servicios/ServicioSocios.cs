@@ -51,11 +51,11 @@ namespace VideoClub.Servicios.Servicios
             }
         }
 
-        public void Borrar(Socio socioId)
+        public void Borrar(int id)
         {
             try
             {
-                repositorio.Borrar(socioId);
+                repositorio.Borrar(id);
                 unitOfWork.Save();
             }
             catch (Exception e)

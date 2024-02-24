@@ -25,11 +25,11 @@ namespace VideoClub.Servicios.Servicios
 
         }
 
-        public void Borrar(Provincia provincia)
+        public void Borrar(int id)
         {
             try
             {
-                repositorio.Borrar(provincia);
+                repositorio.Borrar(id);
                 unitOfWork.Save();
             }
             catch (Exception e)
