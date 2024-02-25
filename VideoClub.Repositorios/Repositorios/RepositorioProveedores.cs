@@ -17,19 +17,22 @@ namespace VideoClub.Repositorios.Repositorios
         {
             this.context = context;
         }
-        public void Borrar(Proveedor proveedorId)
+        public void Borrar(int id)
         {
+            Proveedor proveedorInDb = null;
             try
             {
-                var proveedorInDb = context.Proveedores.SingleOrDefault(p => p.ProveedorId == proveedorId.ProveedorId);
-
+                proveedorInDb = context.Proveedores
+                    .SingleOrDefault(p => p.ProveedorId == id);
+                if (proveedorInDb == null)
+                    return;
                 context.Entry(proveedorInDb).State = EntityState.Deleted;
-
+                //_context.SaveChanges();
             }
             catch (Exception e)
             {
-
-                throw;
+                context.Entry(proveedorInDb).State = EntityState.Unchanged;
+                throw new Exception(e.Message);
             }
         }
 

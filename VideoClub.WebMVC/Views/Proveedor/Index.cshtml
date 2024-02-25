@@ -1,13 +1,10 @@
-﻿@model List<VideoClub.Entidades.Entidades.Proveedor>
-@{ ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml"; }
-<ol class="breadcrumb mt-4 mb-4 ">
-    <li class="breadcrumb-item"><a href="../Empleado/index.html">Dashboard</a></li>
-    <li class="breadcrumb-item active">Proveedores</li>
-</ol>
+﻿@using System.Security.Policy
+@{ ViewBag.Title = "Index"; }
+<script src="~/Scripts/jquery-3.7.1.min.js"></script>
+<script src="~/Scripts/toastr.js"></script>
 <div class="card">
     <h5 class="card-header bg-dark text-white">
-        <i class="fas fa-people-carry"></i>
+        <i class="fab fa-product-hunt"></i>
         Listado de Proveedores
 
     </h5>
@@ -19,7 +16,7 @@
                 <tr>
                     <th>CUIT</th>
                     <th>Razon Social</th>
-                    <th>Pers. Contacto</th>
+                    <th>Persona Contacto</th>
                     <th>Direccion</th>
                     <th>Localidad</th>
                     <th>Provincia</th>
@@ -40,7 +37,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header bg-primary text-white">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Agregar</h1>
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Datos del Proveedor</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -65,10 +62,9 @@
                         <input type="text" class="form-control" id="txtRazonSocial" placeholder="Ingrese Razon Social">
                     </div>
                     <div class="col-md-6">
-                        <label for="txtPersonaContacto" class="form-label">Persona de Contacto</label>
-                        <input type="text" class="form-control" id="txtPersonaContacto" placeholder="Ingrese Nro Documento">
+                        <label for="txtPersonaDeContacto" class="form-label">Persona de Contacto</label>
+                        <input type="text" class="form-control" id="txtPersonaDeContacto" placeholder="Ingrese Persona de Contacto">
                     </div>
-
                     <div class="col-md-6">
                         <label for="txtDireccion" class="form-label">Direccion</label>
                         <input type="text" class="form-control" id="txtDireccion" placeholder="Ingrese Direccion">
@@ -111,18 +107,22 @@
 {
     <script>
         var tablaProveedores;
-        //var filaSeleccionada;
-        //var localidadDelEmpleado = 0;
+        var localidadDelProveedor = 0;
 
         $(document).ready(function() {
-            CargarTabla();
-            //cargarCboProvincias();
-            //cargarCboLocalidad();
+            cargarCboProvincias();
+            cargarTabla();
         });
 
+        $('#cboProvincia').change(function() {
+            var provinciaId = $('#cboProvincia').val();
+            if (provinciaId > 0) {
+                cargarCboLocalidades();
+            }
+        });
 
-        function CargarTabla() {
-             tablaProveedores= $("#tabla").DataTable({
+        function cargarTabla() {
+            tablaProveedores = $("#tabla").DataTable({
                 responsive: "true",
                 ordering: "false",
                 "ajax": {
@@ -133,7 +133,7 @@
                 "columns": [
                     { "data": "CUIT" },
                     { "data": "RazonSocial" },
-                    { "data": "PersonaDeContacto"},
+                    { "data": "PersonaDeContacto" },
                     { "data": "Direccion" },
                     {
                         "data": "Localidad",
@@ -153,50 +153,107 @@
                     { "data": "TelefonoMovil" },
                     { "data": "CorreoElectronico" },
                     {
-                        "defaultContent":
-                            '<button type="button" class="btn btn-warning mx-1 btn-editar"  ><i class="fas fa-pen"></i></button>' +
-                                '<button type="button" class="btn btn-danger mx-1 btn-borrar" ><i class="fas fa-trash"></i></button>',
-                        "orderable": false,
-                        "searchable": false,
+                        "data": "ProveedorId",
+                        "render": function(data) {
+                            return "<button class='btn btn-warning btn-sm btn-editar' type='button' onclick='abrirModal(" +
+                                data +
+                                ")'><i class='fas fa-pen'></i></button> " +
+                                "<button class='btn btn-danger btn-sm' type='button' onclick='Eliminar(" +
+                                data +
+                                ")'><i class='fas fa-trash'></i></button> ";
+                        }
                     }
                 ]
             });
         }
 
-        @*function abrirModal($EmpleadoId) {
+        function cargarCboProvincias() {
+            $('#cboProvincia').empty();
+            $('#cboLocalidad').empty();
+            $.ajax({
+                "url": "@Url.Action("ListarProvincias", "Proveedor")",
+                "type": "GET",
+                "dataType": "json",
+                "contentType": "application/json; charset=utf-8",
+                success: function(provincias) {
+                    console.log(provincias);
+                    $('#cboProvincia').append('<option selected disabled value = "" > ' + 'Seleccionar' + '</option>');
+                    $.each(provincias.data,
+                        function(index, provincia) {
+                            $("#cboProvincia").append('<option value="' +
+                                provincia.ProvinciaId +
+                                '">' +
+                                provincia.NombreProvincia +
+                                '</option>');
+                        });
+
+                }
+            });
+
+        }
+
+        function cargarCboLocalidades() {
+            var provinciaId = $('#cboProvincia').val()
+            $('#cboLocalidad').empty();
+            $.ajax({
+                "url": "@Url.Action("ListarLocalidades", "Proveedor")" + "?provinciaId=" + provinciaId,
+                "type": "POST",
+                "dataType": "json",
+                "contentType": "application/json; charset=utf-8",
+                success: function(localidades) {
+                    console.log(localidades);
+                    $('#cboLocalidad').append('<option selected disabled value = "" > ' + 'Seleccionar' + '</option>');
+                    $.each(localidades.data,
+                        function(index, localidad) {
+                            $("#cboLocalidad").append('<option value="' +
+                                localidad.LocalidadId +
+                                '">' +
+                                localidad.NombreLocalidad +
+                                '</option>');
+                        });
+                    if (localidadDelProveedor != 0) {
+                        $('#cboLocalidad option[value=' + localidadDelProveedor + ']').attr("selected", true);
+
+                    }
+
+                }
+            });
+
+        }
+
+        function abrirModal($ProveedorId) {
             $('#mensajeError').hide();
-            if ($EmpleadoId == 0) {
-                $("#txtEmpleadoId").val(0);
-                $("#txtNombre").val("");
-                $("#txtApellido").val("");
-                $("#txtNumeroDeDocumento").val("");
+            if ($ProveedorId == 0) {
+                $("#txtProveedorId").val(0);
+                $("#txtCUIT").val("");
+                $("#txtRazonSocial").val("");
+                $("#txtPersonaDeContacto").val("");
                 $("#txtDireccion").val("");
                 $("#txtTelefonoFijo").val("");
                 $("#txtTelefonoMovil").val("");
                 $("#txtCorreoElectronico").val("");
-                $("#cboTipoDocumento option:first").val();
                 $("#cboProvincia option:first").val();
                 $("#cboLocalidad option:first").val();;
             } else {
                 $.ajax({
-                    "url": "@Url.Action("ListarEmpleados", "Empleado")" + "?empleadoId=" + $EmpleadoId,
+                    "url": "@Url.Action("ListarProveedor", "Proveedor")" + "?proveedorId=" + $ProveedorId,
                     "type": "GET",
                     "dataType": "json",
                     "contentType": "application/json, charset=utf-8",
-                    success: function(empleado) {
-                        localidadDelEmpleado = empleado.EmpleadoId;
-                        $("#txtEmpleadoId").val(empleado.EmpleadoId);
-                        $("#txtNombre").val(empleado.Nombre);
-                        $("#txtApellido").val(empleado.Apellido);
-                        $("#txtNumeroDeDocumento").val(empleado.NroDocumento);
-                        $("#txtDireccion").val(empleado.Direccion);
-                        $("#txtTelefonoFijo").val(empleado.TelefonoFijo);
-                        $("#txtTelefonoMovil").val(empleado.TelefonoMovil);
-                        $("#txtCorreoElectronico").val(empleado.CorreoElectronico);
+                    success: function(proveedor) {
+                        localidadDelProveedor = proveedor.LocalidadId;
+                        $("#txtProveedorId").val(proveedor.ProveedorId);
+                        $("#txtCUIT").val(proveedor.CUIT);
+                        $("#txtRazonSocial").val(proveedor.RazonSocial);
+                        $("#txtPersonaDeContacto").val(proveedor.PersonaDeContacto);
+                        $("#txtDireccion").val(proveedor.Direccion);
+                        $("#txtTelefonoFijo").val(proveedor.TelefonoFijo);
+                        $("#txtTelefonoMovil").val(proveedor.TelefonoMovil);
+                        $("#txtCorreoElectronico").val(proveedor.CorreoElectronico);
 
-                        $("#cboProvincia").val(empleado.ProvinciaId);
-                        $("#cboLocalidad").val(empleado.LocalidadId);
-                        $("#cboTipoDocumento").val(empleado.TipoDeDocumentoId);
+                        $("#cboProvincia").val(proveedor.ProvinciaId);
+                        cargarCboLocalidades();
+                        $("#cboLocalidad").val(proveedor.LocalidadId);
 
                     },
                     error: function(err) {
@@ -205,56 +262,83 @@
                 });
             }
             $("#FormModal").modal("show");
+        }
 
-        }*@
+        function Guardar() {
 
-        ////@*function cargarCboProvincias() {
-        ////    $('#cboProvincia').empty();
-        ////    $('#cboLocalidad').empty();
-        ////    $.ajax({
-        //////        "url": "@Url.Action("ListarProvincias", "Provincias")",
-        ////        "type": "GET",
-        ////        "dataType": "json",
-        ////        "contentType": "application/json; charset=utf-8",
-        ////        success: function(provincias) {
-        ////            console.log(provincias);
-        ////            $('#cboProvincia').append('<option selected disabled value = "" > ' + 'Seleccionar' + '</option>');
-        ////            $.each(provincias.data,
-        ////                function(index, provincia) {
-        ////                    $("#cboProvincia").append
-        ////                        ('<option value="' + provincia.ProvinciaId + '">' + provincia.NombreProvincia + '</option>');
-        ////                });
+            var proveedor = {
+                ProveedorId: $("#txtProveedorId").val(),
+                CUIT: $("#txtCUIT").val(),
+                RazonSocial: $("#txtRazonSocial").val(),
+                PersonaDeContacto: $("#txtPersonaDeContacto").val(),
+                Direccion: $("#txtDireccion").val(),
+                TelefonoFijo: $("#txtTelefonoFijo").val(),
+                TelefonoMovil: $("#txtTelefonoMovil").val(),
+                CorreoElectronico: $("#txtCorreoElectronico").val(),
+                ProvinciaId: $("#cboProvincia option:selected").val(),
+                LocalidadId: $("#cboLocalidad option:selected").val()
 
-        ////        }
-        ////    });
-
-        ////}*@
-
-        @*function cargarCboLocalidad() {
-            var provinciaId = $('#cboProvincia').val()
-            $('#cboLocalidad').empty();
+            }
+            console.log(proveedor);
+            var request = new FormData();
+            request.append("objeto", JSON.stringify(proveedor));
             $.ajax({
-                "url": "@Url.Action("ListarLocalidades", "Localidad")" + "?provinciaId=" + provinciaId,
-                "type": "GET",
+                "url": "@Url.Action("GuardarProveedor", "Proveedor")",
+                "type": "POST",
                 "dataType": "json",
-                "contentType": "application/json; charset=utf-8",
-                success: function(localidades) {
-                    console.log(localidades);
-                    $('#cboLocalidad').append('<option selected disabled value = "" > ' + 'Seleccionar' + '</option>');
-                    $.each(localidades.data,
-                        function(index, localidad) {
-                            $("#cboLocalidad").append('<option value="' + localidad.LocalidadId + '">' + localidad.NombreLocalidad + '</option>');
-                        });
-                    if (localidadDelSocio != 0) {
-                        $('#cboLocalidad option[value=' + localidadDelSocio + ']').attr("selected", true);
+                data: request,
+                processData: false,
+                contentType: false,
 
+                success: function(response) {
+                    $(".modal-body").LoadingOverlay("hide");
+                    if (response.respuesta) {
+                        toastr.success(response.mensaje);
+                        $('#FormModal').modal('hide');
+                        tablaProveedores.ajax.reload();
+                    } else {
+                        $("#mensajeError").text(response.mensaje);
+                        $("#mensajeError").show();
                     }
+                },
+                error: function() {
+                    console.log('error');
+                },
+                beforeSend: function() {
+                    $(".modal-body").LoadingOverlay("show",
+                        {
+                            imageResizeFactory: 2,
+                            text: "Guardando...",
+                            size: 14
+                        });
 
                 }
+
             });
+        };
 
-        }*@
 
+        function Eliminar($ProveedorId) {
+            if (confirm("Desea eliminar el registro seleccionado?")) {
+                $.ajax({
+                    "url": "@Url.Action("EliminarProveedor", "Proveedor")" + "?proveedorId=" + $ProveedorId,
+                    "type": "POST",
+                    contentType: "application/json; charset=utf-8",
+                    success: function(response) {
+                        if (response.resultado) {
+                            toastr.success(response.mensaje);
+                            tablaProveedores.ajax.reload();
+                        } else {
+                            toastr.error(response.mensaje);
+                        }
+                    },
+                    error: function(response) {
+                        toastr.error(response.mensaje);
+                    }
+                });
+
+            };
+        }
 
     </script>
 }

@@ -161,6 +161,7 @@
     <Compile Include="Models\Localidad\LocalidadListVm.cs" />
     <Compile Include="Models\Pelicula\PeliculaEditVm.cs" />
     <Compile Include="Models\Pelicula\PeliculaListVm.cs" />
+    <Compile Include="Models\Proveedor\ProveedorEditVm.cs" />
     <Compile Include="Models\Proveedor\ProveedorListVm.cs" />
     <Compile Include="Models\Provincia\ProvinciaEditVm.cs" />
     <Compile Include="Models\Provincia\ProvinciaListVm.cs" />

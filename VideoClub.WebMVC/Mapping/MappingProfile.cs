@@ -43,6 +43,7 @@ namespace VideoClub.WebMVC.Mapping
             CreateMap<Proveedor, ProveedorListVm>()
                 .ForMember(dest => dest.Provincia,
                     opt => opt.MapFrom(src => src.Provincia));
+            CreateMap<Proveedor, ProveedorEditVm>();
         }
         private void LoadEmpleadoMapping()
         {
@@ -69,7 +70,7 @@ namespace VideoClub.WebMVC.Mapping
                 .ForMember(dest => dest.Provincia,
                     opt => opt.MapFrom(src => src.Provincia));
             CreateMap<Socio, SocioListVm>()
-                .ForMember(dest => dest.FechaDeNacimiento, 
+                .ForMember(dest => dest.FechaDeNacimiento,
                     opt => opt.MapFrom(src => src.FechaDeNacimiento.ToShortDateString()));
             CreateMap<Socio, SocioEditVm>();
         }

@@ -22,11 +22,11 @@ namespace VideoClub.Servicios.Servicios
             this.context = context;
             this.unitOfWork = unitOfWork;
         }
-        public void Borrar(Proveedor proveedorId)
+        public void Borrar(int id)
         {
             try
             {
-                repositorio.Borrar(proveedorId);
+                repositorio.Borrar(id);
                 unitOfWork.Save();
             }
             catch (Exception e)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,6 +21,7 @@ namespace VideoClub.Entidades.Entidades
         public string TelefonoMovil { get; set; }
         public string CorreoElectronico { get; set; }
         public DateTime FechaDeNacimiento { get; set; }
+
         public bool Sancionado { get; set; }
         public bool Activo { get; set; }
 

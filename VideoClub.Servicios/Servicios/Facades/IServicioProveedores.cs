@@ -11,7 +11,7 @@ namespace VideoClub.Servicios.Servicios.Facades
     {
         void Guardar(Proveedor proveedor);
         List<Proveedor> GetLista();
-        void Borrar(Proveedor proveedorId);
+        void Borrar(int id);
         Proveedor GetProveedorPorId(int id);
         bool Existe(Proveedor proveedor);
         bool EstaRelacionado(Proveedor proveedor);
