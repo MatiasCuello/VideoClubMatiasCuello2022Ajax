@@ -56,6 +56,7 @@ namespace VideoClub.WebMVC.Mapping
             CreateMap<Empleado, EmpleadoListVm>()
                 .ForMember(dest => dest.Provincia,
                     opt => opt.MapFrom(src => src.Provincia));
+            CreateMap<Empleado, EmpleadoEditVm>();
         }
 
         private void LoadSocioMapping()

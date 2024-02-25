@@ -154,6 +154,7 @@
     </Compile>
     <Compile Include="Mapping\MappingProfile.cs" />
     <Compile Include="Models\Calificacion\CalificacionEditVm.cs" />
+    <Compile Include="Models\Empleado\EmpleadoEditVm.cs" />
     <Compile Include="Models\Empleado\EmpleadoListVm.cs" />
     <Compile Include="Models\Estado\EstadoEditVm.cs" />
     <Compile Include="Models\Genero\GeneroEditVm.cs" />

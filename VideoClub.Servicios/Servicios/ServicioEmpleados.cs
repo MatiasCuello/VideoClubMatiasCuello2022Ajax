@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Deployment.Internal;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,11 +23,11 @@ namespace VideoClub.Servicios.Servicios
             this.context = context;
             this.unitOfWork = unitOfWork;
         }
-        public void Borrar(Empleado empleadoId)
+        public void Borrar(int id )
         {
             try
             {
-                repositorio.Borrar(empleadoId);
+                repositorio.Borrar(id);
                 unitOfWork.Save();
             }
             catch (Exception e)

@@ -11,7 +11,7 @@ namespace VideoClub.Servicios.Servicios.Facades
     {
         void Guardar(Empleado empleado);
         List<Empleado> GetLista();
-        void Borrar(Empleado empleadoId);
+        void Borrar(int id);
         Empleado GetEmpleadoPorId(int id);
         bool Existe(Empleado empleado);
         bool EstaRelacionado(Empleado empleado);
